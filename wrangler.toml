@@ -1,0 +1,7 @@
+name = "demain-life"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "dist"
+
+[[kv_namespaces]]
+binding = "DEMAIN_DATA"
+id = "ade44846a5854044b09cb180675efd55"
