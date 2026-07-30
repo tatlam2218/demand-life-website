@@ -5,6 +5,7 @@ import BookingDetailsPage from './pages/BookingDetailsPage.vue'
 import ContractSignPage from './pages/ContractSignPage.vue'
 import BookingPaymentPage from './pages/BookingPaymentPage.vue'
 import BookingPaymentDemoPage from './pages/BookingPaymentDemoPage.vue'
+import BookingPaymentDemoCheckoutPage from './pages/BookingPaymentDemoCheckoutPage.vue'
 import PaymentResultPage from './pages/PaymentResultPage.vue'
 import LegalPage from './pages/LegalPage.vue'
 import AdminLoginChoicePage from './pages/AdminLoginChoicePage.vue'
@@ -26,6 +27,7 @@ const routes = [
   { path: '/book/contract', name: 'book-contract', component: ContractSignPage },
   { path: '/book/payment', name: 'book-payment', component: BookingPaymentPage },
   { path: '/book/payment-demo', name: 'book-payment-demo', component: BookingPaymentDemoPage },
+  { path: '/book/payment-demo-checkout', name: 'book-payment-demo-checkout', component: BookingPaymentDemoCheckoutPage },
   { path: '/book/payment-success', name: 'payment-success', component: PaymentResultPage },
   { path: '/book/payment-failed', name: 'payment-failed', component: PaymentResultPage },
 
