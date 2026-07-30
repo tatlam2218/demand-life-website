@@ -3,6 +3,20 @@ import { reactive, watch } from 'vue'
 
 const STORAGE_KEY = 'demain_shop_cart_v1'
 
+// If the page was loaded with ?cleardone=1 (from /shop/clear-cart redirect),
+// wipe localStorage immediately — before Vue components mount.
+// This runs at module-import time, so cart is always empty on that page load.
+if (typeof window !== 'undefined') {
+  try {
+    if (new URL(window.location.href).searchParams.has('cleardone')) {
+      localStorage.removeItem(STORAGE_KEY)
+      // Clean the URL (remove ?cleardone=1 so it doesn't show in the address bar)
+      const clean = window.location.href.replace(/[?&]cleardone=1?/, '').replace(/\?$/, '')
+      window.history.replaceState(null, '', clean)
+    }
+  } catch (e) {}
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)

@@ -32,6 +32,11 @@ const COPY = {
     leadApproved: 'This payment has been confirmed. Thank you!',
     amount: 'Amount due',
     method: 'How to pay',
+    methodQfpay: 'Pay online with QFPay',
+    methodQfpayNote: 'Credit / debit card, Alipay HK, WeChat Pay, UnionPay — secure redirect to QFPay checkout.',
+    payWithQfpay: 'Pay with QFPay →',
+    qfpayStarting: 'Redirecting to QFPay…',
+    orDivider: 'or pay by bank transfer / FPS',
     methodFPS: 'FPS (recommended)',
     methodBank: 'Bank transfer',
     scanQR: 'Scan the QR code below in any HK bank app, or send to the FPS ID directly.',
@@ -53,7 +58,10 @@ const COPY = {
     submittedBody: 'Our team will review and confirm within one business day. You will receive an email once verified.',
     approved: 'Payment confirmed',
     approvedBody: 'Thank you. Your payment has been verified.',
-    backHome: 'Back to homepage'
+    backHome: 'Back to homepage',
+    paymentNoteTitle: 'About this payment',
+    paymentNoteBody: 'This payment is collected by Demain Culture Limited (operator of Demain Life @ 1331) for accommodation fees. All payments are in HKD via FPS or bank transfer. Please include your booking reference in the transfer note.',
+    legalFooter: 'By making this payment you confirm you have read the <a href="/legal/stay-terms" target="_blank">Stay Terms &amp; Conditions</a>, <a href="/legal/stay-refund" target="_blank">Cancellation &amp; Refund Policy</a>, and <a href="/legal/stay-payment" target="_blank">Payment Scenario</a>.'
   },
   'zh-CN': {
     eyebrow: '付款',
@@ -63,6 +71,11 @@ const COPY = {
     leadApproved: '此笔付款已确认，谢谢！',
     amount: '应付金额',
     method: '付款方式',
+    methodQfpay: '使用 QFPay 网上付款',
+    methodQfpayNote: '信用卡 / 借记卡、支付宝 HK、微信支付、银联 — 安全跳转至 QFPay 付款页面。',
+    payWithQfpay: '以 QFPay 付款 →',
+    qfpayStarting: '正在跳转至 QFPay…',
+    orDivider: '或使用银行转账 / FPS',
     methodFPS: 'FPS 转数快（推荐）',
     methodBank: '银行转账',
     scanQR: '请用任何香港银行 App 扫描下方二维码，或直接转账至 FPS ID。',
@@ -84,7 +97,10 @@ const COPY = {
     submittedBody: '团队将于一个工作日内核对并确认。核对完成后您会收到邮件通知。',
     approved: '付款已确认',
     approvedBody: '感谢您，付款已确认。',
-    backHome: '返回首页'
+    backHome: '返回首页',
+    paymentNoteTitle: '关于本次付款',
+    paymentNoteBody: '本次付款由 Demain Culture Limited（Demain Life @ 1331 运营方）收取，用于住宿费用。所有付款均以港币（HKD）通过 FPS 或银行转账进行。请在转账备注中注明您的预订参考编号。',
+    legalFooter: '提交此款即表示您已阅读<a href="/legal/stay-terms" target="_blank">入住条款及细则</a>、<a href="/legal/stay-refund" target="_blank">取消及退款政策</a>及<a href="/legal/stay-payment" target="_blank">付款场景</a>。'
   },
   'zh-HK': {
     eyebrow: '付款',
@@ -94,6 +110,11 @@ const COPY = {
     leadApproved: '此筆付款已確認，謝謝！',
     amount: '應付金額',
     method: '付款方式',
+    methodQfpay: '使用 QFPay 網上付款',
+    methodQfpayNote: '信用卡 / 借記卡、支付寶 HK、微信支付、銀聯 — 安全跳轉至 QFPay 付款頁面。',
+    payWithQfpay: '以 QFPay 付款 →',
+    qfpayStarting: '正在跳轉至 QFPay…',
+    orDivider: '或使用銀行轉賬 / 轉數快',
     methodFPS: 'FPS 轉數快（建議）',
     methodBank: '銀行轉賬',
     scanQR: '請用任何香港銀行 App 掃描下方二維碼，或直接轉賬至 FPS ID。',
@@ -115,11 +136,41 @@ const COPY = {
     submittedBody: '團隊將於一個工作天內核對並確認。核對完成後您會收到電郵通知。',
     approved: '付款已確認',
     approvedBody: '感謝您，付款已確認。',
-    backHome: '返回首頁'
+    backHome: '返回首頁',
+    paymentNoteTitle: '關於本次付款',
+    paymentNoteBody: '本次付款由 Demain Culture Limited（Demain Life @ 1331 營運方）收取，用於住宿費用。所有付款均以港幣（HKD）透過 FPS 或銀行轉賬進行。請於轉賬備註中註明您的預訂參考編號。',
+    legalFooter: '提交此款即表示您已閱讀<a href="/legal/stay-terms" target="_blank">入住條款及細則</a>、<a href="/legal/stay-refund" target="_blank">取消及退款政策</a>及<a href="/legal/stay-payment" target="_blank">付款場景</a>。'
   }
 }
 const copy = computed(() => COPY[currentLocale.value] || COPY.en)
 const status = computed(() => data.value.paymentRequest?.status || 'awaiting')
+
+// ── QFPay online payment ──────────────────────────────────────────────────
+const qfpayLoading = ref(false)
+const qfpayError   = ref('')
+
+async function startQfpay() {
+  if (qfpayLoading.value) return
+  qfpayLoading.value = true
+  qfpayError.value   = ''
+  try {
+    const res = await fetch(`/api/payments/${bookingId.value}/start`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ token: token.value, lang: currentLocale.value })
+    })
+    const r = await res.json()
+    if (r.checkoutUrl) {
+      window.location.href = r.checkoutUrl   // redirect to QFPay hosted checkout
+    } else {
+      qfpayError.value = r.message || r.error || 'QFPay not available'
+    }
+  } catch (e) {
+    qfpayError.value = e.message
+  } finally {
+    qfpayLoading.value = false
+  }
+}
 
 async function compressImage(file, maxDim = 1600, targetBytes = 250 * 1024) {
   const imgUrl = URL.createObjectURL(file)
@@ -251,6 +302,25 @@ function goHome() { router.push('/') }
           <p v-if="data.paymentRequest?.description" class="amount-desc">{{ data.paymentRequest.description }}</p>
         </div>
 
+        <!-- QFPay option -->
+        <div class="card qfpay-card">
+          <div class="qfpay-header">
+            <span class="qfpay-logo">QF</span>
+            <div>
+              <p class="method-title">{{ copy.methodQfpay }}</p>
+              <p class="muted">{{ copy.methodQfpayNote }}</p>
+            </div>
+          </div>
+          <button class="qfpay-btn" :disabled="qfpayLoading" @click="startQfpay">
+            {{ qfpayLoading ? copy.qfpayStarting : copy.payWithQfpay }}
+          </button>
+          <p v-if="qfpayError" class="form-error">{{ qfpayError }}</p>
+          <p class="qfpay-brands">Visa · Mastercard · Alipay HK · WeChat Pay · UnionPay</p>
+        </div>
+
+        <!-- Or divider -->
+        <div class="or-divider"><span>{{ copy.orDivider }}</span></div>
+
         <!-- Payment instructions -->
         <div class="card">
           <h3 class="section-title">{{ copy.method }}</h3>
@@ -323,6 +393,13 @@ function goHome() { router.push('/') }
           ✓ {{ copy.submitted }} — {{ copy.submittedBody }}
         </div>
       </template>
+
+      <!-- Payment note + legal footer (shown when not loading/error) -->
+      <div v-if="!state.loading && !state.error" class="legal-footer-card">
+        <p class="payment-note-title">{{ copy.paymentNoteTitle }}</p>
+        <p class="payment-note-body">{{ copy.paymentNoteBody }}</p>
+        <p class="legal-footer-text" v-html="copy.legalFooter"></p>
+      </div>
     </div>
   </section>
 </template>
@@ -389,4 +466,44 @@ function goHome() { router.push('/') }
   .qr-row { flex-direction: column; align-items: stretch; }
   .fps-qr { width: 100%; max-width: 280px; height: auto; aspect-ratio: 1; align-self: center; }
 }
+
+/* ── QFPay card ── */
+.qfpay-card { border-color: #1a56db !important; }
+.qfpay-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+.qfpay-logo {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 8px;
+  background: #1a56db; color: #fff;
+  font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em;
+}
+.qfpay-btn {
+  display: block; width: 100%;
+  background: #1a56db; color: #fff;
+  border: none; border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font: inherit; font-weight: 600; font-size: 1rem;
+  cursor: pointer; text-align: center;
+  transition: opacity 0.15s;
+}
+.qfpay-btn:hover:not(:disabled) { opacity: 0.88; }
+.qfpay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.qfpay-brands { font-size: 0.78rem; color: var(--warm-gray-500); margin: 0.75rem 0 0; text-align: center; }
+
+/* ── Or divider ── */
+.or-divider {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin: 0.5rem 0 1.25rem; color: var(--warm-gray-500); font-size: 0.85rem;
+}
+.or-divider::before,
+.or-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--warm-gray-100);
+}
+
+.legal-footer-card { background: var(--paper); border: 1px solid var(--warm-gray-100); border-radius: 8px; padding: 1.25rem 1.5rem; margin-top: 0.5rem; }
+.payment-note-title { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-gray-500); margin: 0 0 0.4rem; }
+.payment-note-body { font-size: 0.88rem; color: var(--warm-gray-700); margin: 0 0 0.75rem; line-height: 1.6; }
+.legal-footer-text { font-size: 0.82rem; color: var(--warm-gray-500); margin: 0; line-height: 1.6; border-top: 1px solid var(--warm-gray-100); padding-top: 0.75rem; }
+.legal-footer-text a { color: var(--warm-gray-700); text-decoration: underline; }
+.legal-footer-text a:hover { color: var(--ink); }
 </style>

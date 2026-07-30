@@ -123,5 +123,9 @@ export default {
     featureExperiences: 'More to come',
     comingSoon: 'Coming Soon',
     foot: 'Demain Club App · a future home for our members'
-  }
+  },
+  shopTerms: 'Terms & Conditions',
+  refundPolicy: 'Refund Policy',
+  shippingPolicy: 'Shipping Policy',
+  privacyPolicy: 'Privacy Policy'
 }

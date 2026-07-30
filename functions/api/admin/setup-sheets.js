@@ -1,16 +1,42 @@
 // POST /api/admin/setup-sheets
-// One-time migration: create 5 new Sheets in 2 sub-folders, delete old one.
-// Body: { confirm: "MIGRATE_SHEETS" }
+// One-time provisioner: creates Drive sub-folders + 5 Google Sheets and writes their IDs to KV.
 //
-// Result stored in KV:
-//   active-sheet-id           → Bookings 2026 (for current legacy compatibility)
-//   sheet-id:bookings         → Bookings 2026
-//   sheet-id:rooms            → Rooms (永久)
-//   sheet-id:payments         → Payments 2026
-//   sheet-id:shop-orders      → Shop Orders 2026
-//   sheet-id:shop-inventory   → Shop Inventory (永久)
-//   folder-id:stay            → Demain Life - Stay folder
-//   folder-id:shop            → Demain Life - Shop folder
+// ⚠️  IMPORTANT — SERVICE ACCOUNT QUOTA LIMITATION
+// ──────────────────────────────────────────────────
+// Google Drive imposes a storage-quota check on the *authenticated user* (the service account)
+// when it creates ANY Google Workspace file (Sheets, Docs, Slides), even via the Drive API
+// with `supportsAllDrives=true`.  Because the service account's own Drive quota is fixed and
+// very small, automated sheet creation will fail with `storageQuotaExceeded` unless the SA's
+// quota has been cleared.
+//
+// RECOMMENDED (MANUAL) REGISTRATION APPROACH — POST /api/admin/setup-sheets-register
+// 1. Open Google Drive as the *workspace owner* (not the SA).
+// 2. Create 5 blank Google Sheets (in any folder you like):
+//      • Demain Life - Bookings YYYY
+//      • Demain Life - Rooms
+//      • Demain Life - Payments YYYY
+//      • Demain Life - Shop Orders YYYY
+//      • Demain Life - Shop Inventory
+// 3. Share each sheet with the service account email (Editor access).
+// 4. POST each sheet ID to /api/admin/register-sheet  — or use gsk hosted d1_execute
+//    to write the KV keys directly:
+//      sheet-id:bookings, sheet-id:rooms, sheet-id:payments,
+//      sheet-id:shop-orders, sheet-id:shop-inventory
+// 5. After registering, call POST /api/admin/init-headers to write column headers
+//    to all 5 sheets in one request.
+//
+// This endpoint still attempts automated creation for environments where the SA quota
+// is not exhausted (e.g. a freshly provisioned SA).  Body: { confirm: "MIGRATE_SHEETS" }
+//
+// KV keys written on success:
+//   active-sheet-id           → Bookings sheet ID (legacy compat alias)
+//   sheet-id:bookings         → Bookings sheet ID
+//   sheet-id:rooms            → Rooms sheet ID
+//   sheet-id:payments         → Payments sheet ID
+//   sheet-id:shop-orders      → Shop Orders sheet ID
+//   sheet-id:shop-inventory   → Shop Inventory sheet ID
+//   folder-id:stay            → Demain Life - Stay Drive folder ID
+//   folder-id:shop            → Demain Life - Shop Drive folder ID
 
 import { requireAuth, json, readJson } from '../_utils.js'
 
@@ -90,63 +116,55 @@ async function driveFindFolder(env, parentId, name) {
   return data.files?.[0]?.id || null
 }
 
-async function sheetsCreate(env, title, headers, parentFolderId, templateSheetId) {
+// Create a Google Sheet via Drive API with mimeType application/vnd.google-apps.spreadsheet.
+// ⚠️  Will fail with storageQuotaExceeded if the service account's Drive quota is exhausted.
+// In that case use the manual registration approach described in the file header comment.
+async function sheetsCreate(env, title, headers, parentFolderId) {
   const { sheetsAccessToken, driveAccessToken } = await import('../_google_internal.js')
   const sheetsToken = await sheetsAccessToken(env)
   const driveToken = await driveAccessToken(env)
 
-  let sheetId
-  if (templateSheetId) {
-    // Copy the user-owned template Sheet (works around Service Account storage quota)
-    const copyResp = await fetch(`https://www.googleapis.com/drive/v3/files/${templateSheetId}/copy?supportsAllDrives=true`, {
-      method: 'POST',
-      headers: { authorization: `Bearer ${driveToken}`, 'content-type': 'application/json' },
-      body: JSON.stringify({ name: title, parents: parentFolderId ? [parentFolderId] : undefined })
-    })
-    if (!copyResp.ok) throw new Error(`Sheet copy: ${copyResp.status} ${await copyResp.text()}`)
-    const copied = await copyResp.json()
-    sheetId = copied.id
-  } else {
-    // Fallback: direct create (won't work without storage quota)
-    const createResp = await fetch('https://sheets.googleapis.com/v4/spreadsheets', {
-      method: 'POST',
-      headers: { authorization: `Bearer ${sheetsToken}`, 'content-type': 'application/json' },
-      body: JSON.stringify({
-        properties: { title },
-        sheets: [{ properties: { title: 'Data' } }]
-      })
-    })
-    if (!createResp.ok) throw new Error(`Sheet create: ${createResp.status} ${await createResp.text()}`)
-    const created = await createResp.json()
-    sheetId = created.spreadsheetId
-
-    if (parentFolderId) {
-      await fetch(`https://www.googleapis.com/drive/v3/files/${sheetId}?addParents=${parentFolderId}&removeParents=root&supportsAllDrives=true`, {
-        method: 'PATCH',
-        headers: { authorization: `Bearer ${driveToken}` }
-      })
-    }
-  }
-
-  // Clear any existing data and set new headers
-  await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A:Z:clear`, {
+  // Drive API creates a Sheets file directly in the specified folder.
+  // This may fail with storageQuotaExceeded — see file header for manual workaround.
+  const createResp = await fetch('https://www.googleapis.com/drive/v3/files?supportsAllDrives=true', {
     method: 'POST',
-    headers: { authorization: `Bearer ${sheetsToken}` }
+    headers: { authorization: `Bearer ${driveToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      name: title,
+      mimeType: 'application/vnd.google-apps.spreadsheet',
+      parents: parentFolderId ? [parentFolderId] : []
+    })
   })
+  if (!createResp.ok) {
+    const errText = await createResp.text()
+    if (errText.includes('storageQuotaExceeded')) {
+      throw new Error(
+        `Service account Drive quota exceeded. Cannot auto-create "${title}". ` +
+        'Use the manual registration approach: create the sheet as a workspace user, ' +
+        'share it with the SA, then register the ID via d1_execute or /api/admin/register-sheet. ' +
+        'After registering all 5 sheets, call POST /api/admin/init-headers to write column headers.'
+      )
+    }
+    throw new Error(`Sheet create via Drive: ${createResp.status} ${errText}`)
+  }
+  const created = await createResp.json()
+  const sheetId = created.id
 
-  // 3. Write headers
-  await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Data!A1:Z1?valueInputOption=USER_ENTERED`, {
+  // Discover actual first tab name (Drive-created sheets default to "Sheet1")
+  const metaInit = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=sheets.properties`, {
+    headers: { authorization: `Bearer ${sheetsToken}` }
+  }).then(r => r.json())
+  const firstTabName = metaInit.sheets?.[0]?.properties?.title || 'Sheet1'
+  const firstTabId = metaInit.sheets?.[0]?.properties?.sheetId ?? 0
+
+  // Write headers to row 1
+  await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(firstTabName)}!A1:Z1?valueInputOption=USER_ENTERED`, {
     method: 'PUT',
     headers: { authorization: `Bearer ${sheetsToken}`, 'content-type': 'application/json' },
     body: JSON.stringify({ values: [headers] })
   })
 
-  // 4. Bold header row
-  const meta = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=sheets.properties`, {
-    headers: { authorization: `Bearer ${sheetsToken}` }
-  }).then(r => r.json())
-  const firstTabId = meta.sheets?.[0]?.properties?.sheetId
-
+  // Bold + freeze header row
   await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}:batchUpdate`, {
     method: 'POST',
     headers: { authorization: `Bearer ${sheetsToken}`, 'content-type': 'application/json' },
@@ -180,7 +198,14 @@ export async function onRequestPost({ request, env }) {
   if (body.confirm !== 'MIGRATE_SHEETS') {
     return json({
       error: 'confirmation_required',
-      hint: 'POST with {"confirm":"MIGRATE_SHEETS"}'
+      hint: 'POST with {"confirm":"MIGRATE_SHEETS"}',
+      manualAlternative: (
+        'If automated creation fails due to SA Drive quota: ' +
+        '(1) Create 5 blank sheets as a workspace user, share each with the SA as Editor. ' +
+        '(2) Register IDs via gsk hosted d1_execute into KV keys: ' +
+        'sheet-id:bookings, sheet-id:rooms, sheet-id:payments, sheet-id:shop-orders, sheet-id:shop-inventory. ' +
+        '(3) Call POST /api/admin/init-headers to write all column headers.'
+      )
     }, 400)
   }
 
@@ -210,31 +235,22 @@ export async function onRequestPost({ request, env }) {
     }
     result.folders.shop = { id: shopFolderId, url: `https://drive.google.com/drive/folders/${shopFolderId}` }
 
-    // Step 3: Create 5 Sheets by COPYING the user-owned template (so they belong to the user)
+    // Step 3: Create 5 Sheets (sequential to avoid rate limits)
+    // ⚠️  May fail with storageQuotaExceeded — see file header comment for manual fallback.
     const year = new Date().getUTCFullYear()
-    const templateId = env.GOOGLE_SHEET_ID  // The original user-owned Sheet acts as template
-    if (!templateId) throw new Error('GOOGLE_SHEET_ID not configured (needed as template for copy)')
 
-    // Run sequentially to avoid Drive API rate limits
-    const bookings = await sheetsCreate(env, `Demain Life - Bookings ${year}`, BOOKINGS_HEADER, stayFolderId, templateId)
-    result.log.push(`Created: ${bookings.sheetId}`)
-    const rooms = await sheetsCreate(env, 'Demain Life - Rooms', ROOMS_HEADER, stayFolderId, templateId)
-    result.log.push(`Created: ${rooms.sheetId}`)
-    const payments = await sheetsCreate(env, `Demain Life - Payments ${year}`, PAYMENTS_HEADER, stayFolderId, templateId)
-    result.log.push(`Created: ${payments.sheetId}`)
-    const shopOrders = await sheetsCreate(env, `Demain Life - Shop Orders ${year}`, SHOP_ORDERS_HEADER, shopFolderId, templateId)
-    result.log.push(`Created: ${shopOrders.sheetId}`)
-    const shopInventory = await sheetsCreate(env, 'Demain Life - Shop Inventory', SHOP_INVENTORY_HEADER, shopFolderId, templateId)
-    result.log.push(`Created: ${shopInventory.sheetId}`)
+    const bookings = await sheetsCreate(env, `Demain Life - Bookings ${year}`, BOOKINGS_HEADER, stayFolderId)
+    result.log.push(`Created bookings sheet: ${bookings.sheetId}`)
+    const rooms = await sheetsCreate(env, 'Demain Life - Rooms', ROOMS_HEADER, stayFolderId)
+    result.log.push(`Created rooms sheet: ${rooms.sheetId}`)
+    const payments = await sheetsCreate(env, `Demain Life - Payments ${year}`, PAYMENTS_HEADER, stayFolderId)
+    result.log.push(`Created payments sheet: ${payments.sheetId}`)
+    const shopOrders = await sheetsCreate(env, `Demain Life - Shop Orders ${year}`, SHOP_ORDERS_HEADER, shopFolderId)
+    result.log.push(`Created shop-orders sheet: ${shopOrders.sheetId}`)
+    const shopInventory = await sheetsCreate(env, 'Demain Life - Shop Inventory', SHOP_INVENTORY_HEADER, shopFolderId)
+    result.log.push(`Created shop-inventory sheet: ${shopInventory.sheetId}`)
 
-    result.sheets = {
-      bookings,
-      rooms,
-      payments,
-      shopOrders,
-      shopInventory
-    }
-    result.log.push('Created 5 sheets in parallel')
+    result.sheets = { bookings, rooms, payments, shopOrders, shopInventory }
 
     // Step 4: Persist Sheet IDs to KV
     await env.DEMAIN_DATA.put('active-sheet-id', bookings.sheetId)
@@ -250,6 +266,16 @@ export async function onRequestPost({ request, env }) {
     return json({ success: true, ...result })
   } catch (err) {
     result.log.push('ERROR: ' + err.message)
-    return json({ error: err.message, partial: result }, 500)
+    return json({
+      error: err.message,
+      partial: result,
+      manualFallback: (
+        'Automated creation failed. Follow the manual registration approach: ' +
+        '(1) Create 5 blank Google Sheets as a workspace user. ' +
+        '(2) Share each sheet with the SA email (from /api/admin/sa-info) as Editor. ' +
+        '(3) Register the 5 sheet IDs in KV via gsk hosted d1_execute. ' +
+        '(4) Call POST /api/admin/init-headers to initialize all column headers.'
+      )
+    }, 500)
   }
 }

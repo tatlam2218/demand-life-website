@@ -28,8 +28,18 @@ async function sheetsToken(env) {
   return sheetsAccessToken(env)
 }
 
-// Read all products from Shop Inventory Sheet
+// Read all products from Shop Inventory Sheet.
+// If a KV override exists (key: 'shop:kv-inventory'), use that instead of the Sheet.
+// This lets staff/admin seed demo products without a Sheet being configured.
 export async function loadInventory(env) {
+  // KV override: used for demo mode or when no Sheet is configured
+  try {
+    const kvOverride = await env.DEMAIN_DATA.get('shop:kv-inventory', 'json')
+    if (Array.isArray(kvOverride) && kvOverride.length > 0) {
+      return kvOverride
+    }
+  } catch (e) { /* ignore */ }
+
   const sheetId = await getShopInventorySheetId(env)
   if (!sheetId) return []
   const token = await sheetsToken(env)

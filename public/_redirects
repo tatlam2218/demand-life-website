@@ -1,1 +1,3 @@
-/* /index.html 200
+# SPA routing is handled by the Worker entry point (worker.js).
+# This file intentionally left without catch-all rules to avoid
+# infinite redirect loops in Workers for Platform deployments.
