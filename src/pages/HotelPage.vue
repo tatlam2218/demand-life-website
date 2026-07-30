@@ -238,6 +238,20 @@ const heroImages = computed(() => PUNK_HERO_IMAGES)
       </div>
     </div>
 
+    <!-- ── App early-adopter strip ─────────────────────────────────────── -->
+    <div class="app-strip container">
+      <div class="app-strip-inner">
+        <div class="app-strip-text">
+          <p class="app-strip-eyebrow"><span class="app-strip-dot"></span>Coming soon</p>
+          <h2 class="app-strip-title">The Demain<br><span class="app-strip-neon">App</span> is on its way.</h2>
+          <p class="app-strip-lead">Manage your stay, book amenities, join community events — all from your phone. Be the first to know when it drops.</p>
+        </div>
+        <a href="/app-waitlist" class="app-strip-btn">
+          Join the early-adopter list →
+        </a>
+      </div>
+    </div>
+
     <div class="cta-section container">
       <p class="eyebrow">{{ hotel.ctaEyebrow }}</p>
       <h2>{{ hotel.ctaTitle }}</h2>
@@ -380,6 +394,100 @@ const heroImages = computed(() => PUNK_HERO_IMAGES)
 .transport-text h2 { margin: 0.75rem 0 0.5rem; }
 .transport-block h4 { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--color-ink); letter-spacing: 0.02em; }
 .transport-block p { font-size: 0.9rem; line-height: 1.7; color: var(--color-warm-gray-700); }
+/* ── App strip ── */
+.app-strip {
+  margin-bottom: 4rem;
+}
+.app-strip-inner {
+  background: #0d0d0d;
+  border-radius: 16px;
+  padding: clamp(2.5rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+/* subtle neon top-left glow */
+.app-strip-inner::before {
+  content: '';
+  position: absolute;
+  top: -60px; left: -60px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(57,255,20,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.app-strip-text { flex: 1; min-width: 240px; }
+.app-strip-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #39ff14;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+.app-strip-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 8px rgba(57,255,20,0.9);
+  animation: dotPulse 2.4s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(57,255,20,0.9); }
+  50%      { box-shadow: 0 0 16px rgba(57,255,20,1), 0 0 28px rgba(57,255,20,0.5); }
+}
+.app-strip-title {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+}
+.app-strip-neon {
+  font-weight: 800;
+  color: #39ff14;
+  text-shadow: 0 0 18px rgba(57,255,20,0.55), 0 0 38px rgba(57,255,20,0.22);
+}
+.app-strip-lead {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  max-width: 420px;
+  margin: 0;
+}
+.app-strip-btn {
+  display: inline-block;
+  background: #39ff14;
+  color: #0d0d0d;
+  border-radius: 999px;
+  padding: 0.9rem 2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 0 1px rgba(57,255,20,0.5), 0 4px 18px rgba(57,255,20,0.35);
+}
+.app-strip-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(57,255,20,0.8), 0 8px 26px rgba(57,255,20,0.5);
+}
+@media (max-width: 640px) {
+  .app-strip-inner { flex-direction: column; align-items: flex-start; }
+  .app-strip-btn { width: 100%; text-align: center; }
+}
+
 .cta-section { padding: 5rem 2rem; text-align: center; margin-bottom: 4rem; background: var(--color-cream); border-radius: 8px; }
 .cta-section .eyebrow { display: block; margin-bottom: 1rem; }
 .cta-section h2 { margin-bottom: 1.5rem; }

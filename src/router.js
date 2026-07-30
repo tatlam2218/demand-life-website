@@ -6,6 +6,7 @@ import ContractSignPage from './pages/ContractSignPage.vue'
 import BookingPaymentPage from './pages/BookingPaymentPage.vue'
 import BookingPaymentDemoPage from './pages/BookingPaymentDemoPage.vue'
 import BookingPaymentDemoCheckoutPage from './pages/BookingPaymentDemoCheckoutPage.vue'
+import AppWaitlistPage from './pages/AppWaitlistPage.vue'
 import PaymentResultPage from './pages/PaymentResultPage.vue'
 import LegalPage from './pages/LegalPage.vue'
 import AdminLoginChoicePage from './pages/AdminLoginChoicePage.vue'
@@ -39,6 +40,9 @@ const routes = [
   { path: '/shop/product/:sku', name: 'shop-product', component: ShopProductPage },
   { path: '/shop/checkout', name: 'shop-checkout', component: ShopCheckoutPage },
   { path: '/shop/order/:orderId', name: 'shop-order-status', component: ShopOrderStatusPage },
+
+  // ============ App waitlist ============
+  { path: '/app-waitlist', name: 'app-waitlist', component: AppWaitlistPage },
 
   // ============ Legal ============
   { path: '/legal/:page(terms|shop-terms|refund|shipping|privacy|stay-terms|stay-refund|stay-payment)', name: 'legal', component: LegalPage },
