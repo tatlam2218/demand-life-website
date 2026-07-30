@@ -49,6 +49,9 @@ const form = ref({
   wechatId: ''
 })
 
+const agreements = ref({ terms1: false, terms2: false, terms3: false, terms4: false })
+const agreementsError = ref('')
+
 const idFrontPreview = ref('')
 const idBackPreview = ref('')
 const idFrontUploaded = ref(false)
@@ -103,9 +106,12 @@ const COPY = {
     preferredCheckIn: 'Preferred check-in time',
     checkInTimes: ['Morning', 'Afternoon', 'Evening', 'Late evening'],
     specialRequests: 'Special requests (optional)',
-    terms1: 'I have read and agree to the Demain Life house rules and tenancy terms.',
+    terms1Html: 'I have read and agree to the <a href="/legal/stay-terms" target="_blank" class="legal-link">Demain Life Stay Terms &amp; Conditions</a>.',
     terms2: 'I agree to pay the security deposit and first month\'s rent on confirmation.',
-    terms3: 'I consent to Demain Life processing my personal information for the purpose of this booking (PIPO).',
+    terms3Html: 'I consent to Demain Life processing my personal information for the purpose of this booking, in accordance with the <a href="/legal/privacy" target="_blank" class="legal-link">Privacy Policy</a> (PIPO).',
+    terms4Html: 'I have read and understood the <a href="/legal/stay-refund" target="_blank" class="legal-link">Cancellation &amp; Refund Policy</a> and the <a href="/legal/stay-payment" target="_blank" class="legal-link">Payment Scenario</a>.',
+    paymentScenarioTitle: 'Payment summary',
+    paymentScenarioBody: 'Upon signing, you will be asked to pay a <strong>security deposit (2 months\' rent)</strong> and <strong>first month\u2019s rent</strong> by FPS or bank transfer to Demain Culture Limited. Monthly rent is due on the 1st of each month thereafter. A payment screenshot must be submitted via the payment page. See <a href="/legal/stay-payment" target="_blank" class="legal-link">Payment Scenario</a> and <a href="/legal/stay-refund" target="_blank" class="legal-link">Cancellation &amp; Refund Policy</a> for full details.',
     signature: 'Type your full name as signature',
     signatureNote: 'By signing here you confirm everything above is accurate.',
     submit: 'Submit details',
@@ -163,9 +169,12 @@ const COPY = {
     preferredCheckIn: '入住时间偏好',
     checkInTimes: ['上午', '下午', '傍晚', '夜间'],
     specialRequests: '特殊要求（选填）',
-    terms1: '我已阅读并同意 Demain Life 入住条款。',
-    terms2: '我同意于确认后支付保证金及首月房租。',
-    terms3: '我同意 Demain Life 出于本次预订之目的处理我的个人信息（PIPO）。',
+    terms1Html: '我已阅读并同意 Demain Life <a href="/legal/stay-terms" target="_blank" class="legal-link">入住条款及细则</a>。',
+    terms2: '我同意于确认后支付押金及首月租金。',
+    terms3Html: '我同意 Demain Life 依据<a href="/legal/privacy" target="_blank" class="legal-link">隐私政策</a>出于本次预订之目的处理我的个人信息（PIPO）。',
+    terms4Html: '我已阅读并了解<a href="/legal/stay-refund" target="_blank" class="legal-link">取消及退款政策</a>与<a href="/legal/stay-payment" target="_blank" class="legal-link">付款场景</a>。',
+    paymentScenarioTitle: '付款摘要',
+    paymentScenarioBody: '签约时，您需透过 FPS 或银行转账向 Demain Culture Limited 支付<strong>押金（两个月租金）</strong>及<strong>首月租金</strong>。此后每月租金于每月 1 日到期。付款截图须透过付款页面提交。详情请参阅<a href="/legal/stay-payment" target="_blank" class="legal-link">付款场景</a>及<a href="/legal/stay-refund" target="_blank" class="legal-link">取消及退款政策</a>。',
     signature: '在此输入您的全名作为签名',
     signatureNote: '签名即确认以上所有资料属实。',
     submit: '提交资料',
@@ -223,9 +232,12 @@ const COPY = {
     preferredCheckIn: '入住時間偏好',
     checkInTimes: ['上午', '下午', '傍晚', '夜間'],
     specialRequests: '特殊要求（選填）',
-    terms1: '我已閱讀並同意 Demain Life 入住條款。',
+    terms1Html: '我已閱讀並同意 Demain Life <a href="/legal/stay-terms" target="_blank" class="legal-link">入住條款及細則</a>。',
     terms2: '我同意於確認後支付按金及首月租金。',
-    terms3: '我同意 Demain Life 出於本次預訂之目的處理我的個人資料（PIPO）。',
+    terms3Html: '我同意 Demain Life 依據<a href="/legal/privacy" target="_blank" class="legal-link">私隱政策</a>出於本次預訂之目的處理我的個人資料（PIPO）。',
+    terms4Html: '我已閱讀並了解<a href="/legal/stay-refund" target="_blank" class="legal-link">取消及退款政策</a>與<a href="/legal/stay-payment" target="_blank" class="legal-link">付款場景</a>。',
+    paymentScenarioTitle: '付款摘要',
+    paymentScenarioBody: '簽約時，您需透過 FPS 或銀行轉賬向 Demain Culture Limited 支付<strong>按金（兩個月租金）</strong>及<strong>首月租金</strong>。此後每月租金於每月 1 日到期。付款截圖須透過付款頁面提交。詳情請參閱<a href="/legal/stay-payment" target="_blank" class="legal-link">付款場景</a>及<a href="/legal/stay-refund" target="_blank" class="legal-link">取消及退款政策</a>。',
     signature: '在此輸入您的全名作為簽名',
     signatureNote: '簽名即確認以上所有資料屬實。',
     submit: '提交資料',
@@ -401,7 +413,18 @@ function onFieldEdit(key) {
 
 // ============== Submit ==============
 async function submit() {
-  // Validate (signature + agreements removed — moved to contract step)
+  // Validate agreements
+  const { terms1, terms2, terms3, terms4 } = agreements.value
+  if (!terms1 || !terms2 || !terms3 || !terms4) {
+    agreementsError.value = currentLocale.value === 'zh-CN'
+      ? '請先同意所有條款後繼續。'
+      : currentLocale.value === 'zh-HK'
+        ? '請先同意所有條款後繼續。'
+        : 'Please accept all terms to continue.'
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    return
+  }
+  agreementsError.value = ''
   const required = ['documentType', 'documentNumber', 'name', 'dateOfBirth', 'gender',
     'occupation', 'currentAddress',
     'emergencyName', 'emergencyRelation', 'emergencyPhone']
@@ -747,7 +770,35 @@ function goToContract() {
           </label>
         </section>
 
-        <!-- Terms & signature section removed: signature now happens at the contract step. -->
+        <!-- Terms & agreements section -->
+        <section class="form-section">
+          <h2 class="section-title">{{ copy.sectionTerms }}</h2>
+
+          <!-- Payment scenario summary -->
+          <div class="payment-scenario-box">
+            <p class="scenario-title">{{ copy.paymentScenarioTitle }}</p>
+            <p class="scenario-body" v-html="copy.paymentScenarioBody"></p>
+          </div>
+
+          <!-- Terms checkboxes -->
+          <label class="check-row">
+            <input type="checkbox" v-model="agreements.terms1" />
+            <span v-html="copy.terms1Html"></span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" v-model="agreements.terms2" />
+            <span>{{ copy.terms2 }}</span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" v-model="agreements.terms3" />
+            <span v-html="copy.terms3Html"></span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" v-model="agreements.terms4" />
+            <span v-html="copy.terms4Html"></span>
+          </label>
+          <p v-if="agreementsError" class="terms-error-msg">{{ agreementsError }}</p>
+        </section>
 
         <div v-if="state.error" class="form-error">{{ state.error }}</div>
 
@@ -829,8 +880,13 @@ textarea { min-height: 70px; }
 .contact-pill.active { background: var(--color-ink, #2a2826); color: #fff; border-color: var(--color-ink, #2a2826); }
 .contact-pill:hover:not(.active) { border-color: var(--color-warm-gray-300, #c4c1ba); }
 .contact-extra { margin-top: 0.5rem; }
-.legal-link { color: var(--ink); text-decoration: none; padding: 0 4px; font-weight: 500; }
-.legal-link:hover { text-decoration: underline; }
+.legal-link { color: var(--ink); text-decoration: underline; font-weight: 500; }
+.legal-link:hover { opacity: 0.75; }
+
+.payment-scenario-box { background: #fdf6e3; border: 1px solid #d4cfb8; border-radius: 6px; padding: 1rem 1.25rem; }
+.scenario-title { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: #6b5a2a; margin: 0 0 0.5rem; font-weight: 500; }
+.scenario-body { margin: 0; font-size: 0.9rem; line-height: 1.65; color: #3a3020; }
+.terms-error-msg { color: #d62828; font-size: 0.82rem; margin: 0.25rem 0 0 1.75rem; }
 
 .form-error { background: #fdf3f3; border: 1px solid #e0c8c8; padding: 1rem 1.25rem; border-radius: 4px; color: #6b4444; margin-top: 2rem; }
 .form-footer { display: flex; justify-content: flex-end; margin-top: 2rem; }

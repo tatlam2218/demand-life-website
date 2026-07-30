@@ -1,13 +1,14 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useSiteContent } from '../composables/useSiteContent'
 import ImageSlideshow from '../components/ImageSlideshow.vue'
 import LangSwitch from '../components/LangSwitch.vue'
 import { useI18n } from '../i18n'
-import { addToCart, cart, cartSubtotal, cartItemCount } from '../stores/cart.js'
+import { addToCart, cart, cartSubtotal, cartItemCount, clearCart } from '../stores/cart.js'
 
 const { t } = useI18n()
+const route = useRoute()
 
 const DC_PALETTE = {
   green:  '#39ff14',
@@ -29,8 +30,27 @@ const activeCategory = ref('all')
 const lastAdded = ref(null)
 
 onMounted(async () => {
+  // ?clearcart=1 or ?clearcart=done — clear the basket (demo / QFPay reviewer reset)
+  if (route.query.clearcart) {
+    clearCart()
+    // Remove the query param from the URL without re-loading the page
+    const url = new URL(window.location.href)
+    url.searchParams.delete('clearcart')
+    window.history.replaceState({}, '', url.toString())
+  }
+
   try {
     const res = await fetch('/api/shop/products')
+    if (!res.ok) {
+      // Non-2xx or HTML error page (e.g. in local preview without backend)
+      loadError.value = `Server error (${res.status}) — please visit the live site to browse products.`
+      return
+    }
+    const ct = res.headers.get('content-type') || ''
+    if (!ct.includes('application/json')) {
+      loadError.value = 'Products unavailable in preview mode — visit the live site.'
+      return
+    }
     const data = await res.json()
     if (data.success) products.value = data.products
     else loadError.value = data.error || 'Failed to load products'
@@ -214,6 +234,17 @@ function goShopHome() { router.push('/shop') }
     >
       🛍️ {{ cartItemCount() }} · HK${{ cartSubtotal() }}
     </button>
+
+    <!-- Legal Footer -->
+    <footer class="shop-legal-footer">
+      <router-link to="/legal/shop-terms">{{ t('shopTerms') || 'Terms &amp; Conditions' }}</router-link>
+      <span>·</span>
+      <router-link to="/legal/refund">{{ t('refundPolicy') || 'Refund Policy' }}</router-link>
+      <span>·</span>
+      <router-link to="/legal/shipping">{{ t('shippingPolicy') || 'Shipping Policy' }}</router-link>
+      <span>·</span>
+      <router-link to="/legal/privacy">{{ t('privacyPolicy') || 'Privacy Policy' }}</router-link>
+    </footer>
   </section>
 </template>
 
@@ -645,4 +676,16 @@ function goShopHome() { router.push('/shop') }
   font-weight: 600;
 }
 :global(.shell-shop) .close-btn { color: rgba(255,255,255,0.5); }
+
+.shop-legal-footer {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem;
+  justify-content: center; align-items: center;
+  padding: 1.5rem 1rem 2rem;
+  font-size: 0.76rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 2rem;
+}
+.shop-legal-footer a { color: rgba(255,255,255,0.35); text-decoration: none; }
+.shop-legal-footer a:hover { color: rgba(255,255,255,0.65); }
+.shop-legal-footer span { color: rgba(255,255,255,0.15); }
 </style>

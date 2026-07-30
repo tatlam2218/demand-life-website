@@ -3,11 +3,11 @@
 // Wipes all room:* keys from KV so the entire grid returns to "vacant" state.
 // Useful for demo cleanup or when bookings have been bulk-deleted.
 
-import { requireStayAuth, json, readJson } from '../../_utils.js'
+import { requireStayAuth, json, readJson, requireAuth } from '../../_utils.js'
 import { BLOCK_NUMBERS, ROOM_NUMBERS, roomId } from '../../_rooms.js'
 
 export async function onRequestPost({ request, env }) {
-  if (!(await requireAuth(request, env))) {
+  if (!(await requireStayAuth(request, env))) {
     return json({ error: 'unauthorized' }, 401)
   }
   const body = await readJson(request).catch(() => ({}))

@@ -60,6 +60,11 @@ const COPY = {
     submit: 'Send enquiry',
     submitting: 'Sending…',
     required: 'Required',
+    termsConsent: 'I have read and agree to the',
+    termsConsentLink: 'Stay Terms & Conditions',
+    termsConsentAnd: 'and',
+    privacyConsentLink: 'Privacy Policy',
+    termsRequired: 'Please accept the Terms & Conditions to continue.',
     successTitle: 'Enquiry received.',
     successLead: 'Thank you — your reference number is',
     successBody: 'We will reach out to you within one business day. Please keep your reference number above when our team contacts you.',
@@ -93,6 +98,11 @@ const COPY = {
     submit: '提交咨询',
     submitting: '提交中…',
     required: '必填',
+    termsConsent: '我已阅读并同意',
+    termsConsentLink: '入住条款及细则',
+    termsConsentAnd: '及',
+    privacyConsentLink: '隐私政策',
+    termsRequired: '请接受条款及细则后继续。',
     successTitle: '已收到您的咨询。',
     successLead: '感谢您 — 您的参考编号是',
     successBody: '我们将于一个工作日内与您联系。请在我们联系您时准备好上面的参考编号。',
@@ -126,6 +136,11 @@ const COPY = {
     submit: '提交查詢',
     submitting: '提交中…',
     required: '必填',
+    termsConsent: '我已閱讀並同意',
+    termsConsentLink: '入住條款及細則',
+    termsConsentAnd: '及',
+    privacyConsentLink: '私隱政策',
+    termsRequired: '請接受條款及細則後繼續。',
     successTitle: '已收到您的查詢。',
     successLead: '感謝您 — 您的參考編號為',
     successBody: '我們將於一個工作天內與您聯絡。請在我們聯絡您時準備好上面的參考編號。',
@@ -139,6 +154,8 @@ const COPY = {
 const copy = computed(() => COPY[locale.value] || COPY.en)
 const roomOptions = computed(() => rooms.value || [])
 
+const termsAccepted = ref(false)
+
 const errors = ref({})
 function validate() {
   const e = {}
@@ -149,6 +166,7 @@ function validate() {
   if (!form.value.moveInDate.trim()) e.moveInDate = true
   if (form.value.contactMethod === 'whatsapp' && !form.value.whatsappSameAsPhone && !form.value.whatsappNumber.trim()) e.whatsappNumber = true
   if (form.value.contactMethod === 'wechat' && !form.value.wechatId.trim()) e.wechatId = true
+  if (!termsAccepted.value) e.terms = true
   errors.value = e
   return Object.keys(e).length === 0
 }
@@ -303,6 +321,20 @@ function goHome() {
             </div>
           </div>
 
+          <!-- T&C consent -->
+          <div class="terms-consent-row">
+            <label class="check-row" :class="{ 'terms-error': errors.terms }">
+              <input type="checkbox" v-model="termsAccepted" />
+              <span>
+                {{ copy.termsConsent }}
+                <a href="/legal/stay-terms" class="legal-link" target="_blank" @click.stop>{{ copy.termsConsentLink }}</a>
+                {{ copy.termsConsentAnd }}
+                <a href="/legal/privacy" class="legal-link" target="_blank" @click.stop>{{ copy.privacyConsentLink }}</a>
+              </span>
+            </label>
+            <p v-if="errors.terms" class="terms-error-msg">{{ copy.termsRequired }}</p>
+          </div>
+
           <div v-if="result?.error" class="form-error">
             <strong>{{ copy.errorTitle }}</strong>
             <span>{{ copy.errorBody }}</span>
@@ -372,6 +404,11 @@ textarea { resize: vertical; min-height: 100px; }
 }
 .form-error strong { font-weight: 500; }
 
+.terms-consent-row { background: var(--paper); border-radius: 4px; padding: 0.85rem 1rem; }
+.check-row.terms-error { outline: 1px solid #d62828; border-radius: 4px; }
+.terms-error-msg { color: #d62828; font-size: 0.8rem; margin: 0.35rem 0 0 1.6rem; }
+.legal-link { color: var(--ink); font-weight: 500; text-decoration: underline; }
+.legal-link:hover { opacity: 0.75; }
 .form-footer { display: flex; justify-content: flex-end; margin-top: var(--space-sm); }
 .btn-primary {
   background: var(--ink);

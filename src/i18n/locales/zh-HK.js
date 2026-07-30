@@ -123,5 +123,9 @@ export default {
     featureExperiences: '更多體驗',
     comingSoon: '即將推出',
     foot: 'Demain Club App · 我們未來的會員主場'
-  }
+  },
+  shopTerms: '購物條款及細則',
+  refundPolicy: '退款政策',
+  shippingPolicy: '送貨政策',
+  privacyPolicy: '私隱政策'
 }

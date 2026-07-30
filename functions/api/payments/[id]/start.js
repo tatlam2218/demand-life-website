@@ -40,7 +40,7 @@ export async function onRequestPost({ request, env, params }) {
       amount,
       currency: 'HKD',
       orderId,
-      returnUrl: `${siteUrl}/book/payment-success?id=${booking.id}&token=${token}`,
+      returnUrl: `${siteUrl}/book/payment-success?id=${booking.id}&token=${token}&via=qfpay`,
       failedUrl: `${siteUrl}/book/payment-failed?id=${booking.id}&token=${token}`,
       notifyUrl: `${siteUrl}/api/payments/notify`,
       cancelUrl: `${siteUrl}/book/payment-failed?id=${booking.id}&token=${token}`,

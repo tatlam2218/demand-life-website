@@ -1,7 +1,21 @@
 name = "demain-life"
 compatibility_date = "2025-01-01"
-pages_build_output_dir = "dist"
 
-[[kv_namespaces]]
-binding = "DEMAIN_DATA"
-id = "ade44846a5854044b09cb180675efd55"
+# Worker entry point
+main = "worker.js"
+
+# Static assets from Vite build output (served by env.ASSETS)
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+# D1 database — replaces the original Cloudflare KV binding.
+# The _kv_adapter.js shim presents a KV-compatible interface backed by D1.
+# The hosted deploy pipeline auto-provisions this D1 and rewrites the id.
+[[d1_databases]]
+binding = "DB"
+database_name = "demain-life-db"
+database_id = "local"
+
+[vars]
+SITE_URL = "https://579e766b-2044-45b8-b6c3-b9765d0118bd.vip.gensparksite.com"
