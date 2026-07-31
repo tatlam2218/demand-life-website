@@ -39,6 +39,9 @@ import * as contractView from './functions/api/contracts/[id]/view.js'
 import * as paymentStart from './functions/api/payments/[id]/start.js'
 import * as paymentNotify from './functions/api/payments/notify.js'
 
+// App waitlist (public)
+import * as apiWaitlist from './functions/api/waitlist/index.js'
+
 // Shop (public)
 import * as shopProducts from './functions/api/shop/products.js'
 import * as shopProductSku from './functions/api/shop/products/[sku].js'
@@ -107,6 +110,9 @@ const ROUTES = [
   { pattern: /^\/api\/content$/, params: [], module: apiContent },
   { pattern: /^\/api\/legal$/, params: [], module: apiLegal },
   { pattern: /^\/api\/translate$/, params: [], module: apiTranslate },
+
+  // App waitlist
+  { pattern: /^\/api\/waitlist$/, params: [], module: apiWaitlist },
 
   // Admin - shop (specific before generic)
   { pattern: /^\/api\/admin\/shop\/inventory\/([^/]+)$/, params: ['sku'], module: adminShopInventorySku },
