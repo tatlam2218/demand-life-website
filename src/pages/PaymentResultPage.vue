@@ -18,43 +18,43 @@ if (urlLang === 'en' || urlLang === 'zh-CN' || urlLang === 'zh-HK') {
 const COPY = {
   en: {
     // QFPay paid — instant confirmation
-    paidTitle:  'Payment complete',
-    paidBody:   'Your payment was processed successfully via QFPay. You will receive a confirmation email shortly. Thank you for booking with Demain Life.',
+    paidTitle:  'Accommodation payment received',
+    paidBody:   'Your accommodation payment has been successfully processed via QFPay. Your room at Demain Life @ 1331 is secured. A confirmation email with your booking details will be sent to you shortly.',
     paidBadge:  'Paid via QFPay',
 
     // FPS / bank transfer screenshot uploaded
-    successTitle: 'Screenshot received',
-    successBody:  'Thank you. We have received your payment screenshot. Our team will verify the transfer within 1 business day and email you once confirmed.',
+    successTitle: 'Payment screenshot received',
+    successBody:  'Thank you for your accommodation payment. We have received your transfer screenshot and will verify the payment within 1 business day. Once confirmed, we will email you with your booking confirmation.',
 
     // Failed
-    failTitle: 'Payment was not completed.',
-    failBody:  'No charge was made. You can retry the payment from the link in your confirmation email, or contact us if you need help.',
+    failTitle: 'Accommodation payment not completed',
+    failBody:  'Your accommodation payment was not completed and no charge has been made. Please retry using the payment link in your booking email, or contact our team at hello@demainculture.com for assistance.',
 
     backHome: 'Back to homepage',
   },
   'zh-CN': {
-    paidTitle:  '付款完成',
-    paidBody:   '您的付款已通过 QFPay 成功处理。确认邮件将会发送到您的邮箱。感谢您选择 Demain Life。',
+    paidTitle:  '住宿付款已完成',
+    paidBody:   '您的住宿费用已通过 QFPay 成功支付。您在 Demain Life @ 1331 的房间已确认预订。预订确认邮件将于稍后发送至您的邮箱。',
     paidBadge:  '已通过 QFPay 付款',
 
-    successTitle: '截图已收到',
-    successBody:  '感谢您。我们已收到付款截图，团队将在 1 个工作日内核对汇款，确认后会电邮通知您。',
+    successTitle: '付款截图已收到',
+    successBody:  '感谢您完成住宿付款。我们已收到您的转账截图，团队将于 1 个工作日内核对款项。确认后，我们将以电邮发送您的预订确认函。',
 
-    failTitle: '付款未完成。',
-    failBody:  '未产生任何扣款。您可以从确认邮件中的链接重试付款，或联系我们获取帮助。',
+    failTitle: '住宿付款未完成',
+    failBody:  '您的住宿付款未能完成，且未产生任何扣款。请通过预订邮件中的付款链接重试，或发送邮件至 hello@demainculture.com 联系我们的团队。',
 
     backHome: '返回首页',
   },
   'zh-HK': {
-    paidTitle:  '付款完成',
-    paidBody:   '您的付款已透過 QFPay 成功處理。確認電郵將會發送到您的郵箱。感謝您選擇 Demain Life。',
+    paidTitle:  '住宿付款已完成',
+    paidBody:   '您的住宿費用已透過 QFPay 成功支付。您在 Demain Life @ 1331 的房間已確認預訂。預訂確認電郵將於稍後發送至您的郵箱。',
     paidBadge:  '已透過 QFPay 付款',
 
-    successTitle: '截圖已收到',
-    successBody:  '感謝您。我們已收到付款截圖，團隊將於 1 個工作日內核對匯款，確認後會電郵通知您。',
+    successTitle: '付款截圖已收到',
+    successBody:  '感謝您完成住宿付款。我們已收到您的轉賬截圖，團隊將於 1 個工作日內核對款項。確認後，我們將以電郵發送您的預訂確認函。',
 
-    failTitle: '付款未完成。',
-    failBody:  '未產生任何扣款。您可以從確認電郵中的連結重試付款，或聯絡我們獲取協助。',
+    failTitle: '住宿付款未完成',
+    failBody:  '您的住宿付款未能完成，且未產生任何扣款。請透過預訂電郵中的付款連結重試，或發送電郵至 hello@demainculture.com 聯絡我們的團隊。',
 
     backHome: '返回首頁',
   }
