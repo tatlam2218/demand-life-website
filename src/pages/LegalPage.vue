@@ -17,7 +17,7 @@ async function load() {
   error.value = ''
   // Determine type from path param
   const page = route.params.page || ''
-  const VALID = ['terms', 'shop-terms', 'refund', 'shipping', 'privacy']
+  const VALID = ['terms', 'shop-terms', 'refund', 'shipping', 'privacy', 'stay-terms', 'stay-refund', 'stay-payment', 'disclaimer']
   type.value = VALID.includes(page) ? page : 'terms'
   try {
     const resp = await fetch(`/api/legal?type=${type.value}&lang=${currentLocale.value}`)

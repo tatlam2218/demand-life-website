@@ -1343,14 +1343,64 @@ export const DEFAULT_LEGAL = {
     'zh-HK': DEFAULT_STAY_PAYMENT_ZH_HK,
     'zh-CN': DEFAULT_STAY_PAYMENT_ZH_CN
   },
+  disclaimer: {
+    en: `<h1>Disclaimer</h1>
+<p><em>Last updated: August 2026</em></p>
+<h2>Accuracy of Information</h2>
+<p>The information on this website is provided for general reference only. Demain Culture Entertainment Limited reserves the right to modify room rates, policies, and facility details at any time without prior notice.</p>
+<h2>No Warranty</h2>
+<p>This website is provided "as is" without any representations or warranties, express or implied. We make no representations or warranties in relation to the accuracy or completeness of the information found on this website.</p>
+<h2>External Links</h2>
+<p>This website may contain links to external websites. We have no control over the content of those sites and accept no responsibility for them or for any loss or damage that may arise from your use of them.</p>
+<h2>Payment Security</h2>
+<p>All online payments are encrypted and processed by QFPay. Demain Culture Entertainment Limited does not store any credit card or payment card data.</p>
+<h2>Limitation of Liability</h2>
+<p>To the fullest extent permitted by Hong Kong law, Demain Culture Entertainment Limited shall not be liable for any indirect, special, or consequential loss or damage arising from the use of this website or our services.</p>
+<h2>Governing Law</h2>
+<p>This disclaimer is governed by the laws of the Hong Kong Special Administrative Region. Any disputes shall be subject to the exclusive jurisdiction of the Hong Kong courts.</p>
+<h2>Contact</h2>
+<p>Demain Culture Entertainment Limited<br>Suites 1218-19, 12/F, Chevalier Commercial Centre, 8 Wang Hoi Road, Kowloon Bay, Hong Kong<br>Tel: +852 2129 0190 · Email: hello@demainculture.com</p>`,
+    'zh-HK': `<h1>免責聲明</h1>
+<p><em>最後更新：2026年8月</em></p>
+<h2>資訊準確性</h2>
+<p>本網站所載資訊僅供一般參考之用。Demain Culture Entertainment Limited 保留隨時修改房租、政策及設施資訊之權利，恕不另行通知。</p>
+<h2>無保證聲明</h2>
+<p>本網站以「現狀」提供，不作任何明示或默示之陳述或保證。我們對本網站所載資訊之準確性或完整性不作任何陳述或保證。</p>
+<h2>外部連結</h2>
+<p>本網站可能包含外部網站之連結。我們對該等網站之內容無法控制，並對因使用該等網站而引起之任何損失或損害概不負責。</p>
+<h2>支付安全</h2>
+<p>所有線上付款均由 QFPay 加密處理。Demain Culture Entertainment Limited 不儲存任何信用卡或付款卡資料。</p>
+<h2>責任限制</h2>
+<p>在香港法律允許的最大範圍內，Demain Culture Entertainment Limited 對因使用本網站或我們的服務而引起的任何間接、特殊或後果性損失或損害概不負責。</p>
+<h2>適用法律</h2>
+<p>本免責聲明受香港特別行政區法律管轄，任何爭議由香港法院專屬管轄。</p>
+<h2>聯絡方式</h2>
+<p>Demain Culture Entertainment Limited<br>香港九龍灣宏開道8號其士商業中心12樓1218-19室<br>電話：+852 2129 0190 · 電郵：hello@demainculture.com</p>`,
+    'zh-CN': `<h1>免责声明</h1>
+<p><em>最后更新：2026年8月</em></p>
+<h2>信息准确性</h2>
+<p>本网站所载信息仅供一般参考之用。Demain Culture Entertainment Limited 保留随时修改房租、政策及设施信息之权利，恕不另行通知。</p>
+<h2>无保证声明</h2>
+<p>本网站以「现状」提供，不作任何明示或默示之陈述或保证。我们对本网站所载信息之准确性或完整性不作任何陈述或保证。</p>
+<h2>外部链接</h2>
+<p>本网站可能包含外部网站之链接。我们对该等网站之内容无法控制，并对因使用该等网站而引起之任何损失或损害概不负责。</p>
+<h2>支付安全</h2>
+<p>所有线上付款均由 QFPay 加密处理。Demain Culture Entertainment Limited 不存储任何信用卡或付款卡资料。</p>
+<h2>责任限制</h2>
+<p>在香港法律允许的最大范围内，Demain Culture Entertainment Limited 对因使用本网站或我们的服务而引起的任何间接、特殊或后果性损失或损害概不负责。</p>
+<h2>适用法律</h2>
+<p>本免责声明受香港特别行政区法律管辖，任何争议由香港法院专属管辖。</p>
+<h2>联系方式</h2>
+<p>Demain Culture Entertainment Limited<br>香港九龙湾宏开道8号其士商业中心12楼1218-19室<br>电话：+852 2129 0190 · 邮箱：hello@demainculture.com</p>`
+  },
   // Default landlord info — editable in admin
   landlord: {
-    name: 'Demain Culture Limited',
-    address: 'Demain Life @ 1331, Kai Tak, Kowloon, Hong Kong',
+    name: 'Demain Culture Entertainment Limited',
+    address: 'Suites 1218-19, 12/F, Chevalier Commercial Centre, 8 Wang Hoi Road, Kowloon Bay, Hong Kong',
     representative: 'Tat Lam',
     bankName: 'ZA Bank',
     bankAccountNumber: '882002273557',
-    bankAccountName: 'Demain Culture Limited',
+    bankAccountName: 'Demain Culture Entertainment Limited',
     fpsId: '115403669',
     fpsQrUrl: '/payment/fps-qr.jpg'
   }

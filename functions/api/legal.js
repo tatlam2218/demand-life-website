@@ -7,7 +7,7 @@ export async function onRequestGet({ request, env }) {
   const url = new URL(request.url)
   const type = url.searchParams.get('type') || 'terms'
   const lang = url.searchParams.get('lang') || 'en'
-  const VALID_TYPES = ['terms', 'shop-terms', 'refund', 'shipping', 'privacy', 'stay-terms', 'stay-refund', 'stay-payment']
+  const VALID_TYPES = ['terms', 'shop-terms', 'refund', 'shipping', 'privacy', 'stay-terms', 'stay-refund', 'stay-payment', 'disclaimer']
   if (!VALID_TYPES.includes(type)) {
     return json({ error: 'invalid_type' }, { status: 400 })
   }

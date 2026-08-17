@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Runway 1331 × Demain — 預訂查詢</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #2C3E50;
+  --navy-dark: #1a2635;
+  --navy-mid: #3d5066;
+  --blue: #3B5998;
+  --blue-light: #4a6db5;
+  --gold: #c9a84c;
+  --gold-light: #f0d98a;
+  --bg: #F8F9FA;
+  --bg2: #eef1f5;
+  --white: #ffffff;
+  --gray: #6c757d;
+  --gray-light: #dee2e6;
+  --gray-text: #495057;
+  --ink: #212529;
+  --red: #c0392b;
+  --green: #27ae60;
+  --radius: 10px;
+  --shadow: 0 2px 16px rgba(44,62,80,0.10);
+  --shadow-lg: 0 8px 40px rgba(44,62,80,0.16);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', 'PingFang HK', 'Noto Sans TC', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* NAV */
+.topnav {
+  background: var(--navy-dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 62px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+.topnav-logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.topnav-logo span { color: var(--gold); }
+.topnav-links {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+}
+.topnav-links a {
+  color: rgba(255,255,255,0.82);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.topnav-links a:hover { color: var(--gold); }
+.topnav-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.nav-pill {
+  background: var(--gold);
+  color: var(--navy-dark);
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.nav-pill:hover { background: var(--gold-light); }
+.lang-sel {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+/* PAGE TABS */
+.page-tab { display: none; }
+.page-tab.active { display: block; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 60%, #2563a7 100%);
+  color: #fff;
+  text-align: center;
+  padding: 5rem 1.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.hero h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+}
+.hero h1 span { color: var(--gold); }
+.hero-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  font-weight: 300;
+}
+
+/* NOTICE BANNER */
+.notice-banner {
+  background: rgba(201,168,76,0.13);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin: 0 auto 2rem;
+  max-width: 640px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.9);
+  text-align: left;
+}
+.notice-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+/* CONTAINER */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.container-sm { max-width: 700px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* INQUIRY FORM */
+.inquiry-section {
+  padding: 3rem 1.5rem 5rem;
+}
+.form-card {
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  padding: 2.5rem 2.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.form-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.3rem;
+}
+.form-subtitle {
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin-bottom: 2rem;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gray-text);
+  letter-spacing: 0.02em;
+}
+.form-label .req { color: var(--red); margin-left: 2px; }
+.form-control {
+  border: 1.5px solid var(--gray-light);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--white);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.form-control:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(44,62,80,0.08);
+}
+textarea.form-control { resize: vertical; min-height: 90px; }
+.btn-primary {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 13px 32px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); }
+.btn-primary.gold-btn { background: var(--gold); color: var(--navy-dark); }
+.btn-primary.gold-btn:hover { background: #b8943e; }
+.btn-secondary {
+  background: var(--bg2);
+  color: var(--gray-text);
+  border: 1.5px solid var(--gray-light);
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--gray-light); }
+
+/* SUCCESS STATE */
+.success-box {
+  display: none;
+  background: #eafaf1;
+  border: 1.5px solid #a9dfbf;
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.success-box.show { display: block; }
+.success-box h3 { color: var(--green); font-size: 1.1rem; margin-bottom: 0.4rem; }
+.success-box p { font-size: 0.88rem; color: var(--gray-text); }
+
+/* CHECKOUT */
+.checkout-wrap { padding: 2.5rem 1.5rem 5rem; }
+
+/* STEPPER */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1.2rem 2rem;
+}
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  cursor: pointer;
+}
+.step-item:not(:last-child)::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--gray-light);
+  margin: 0 12px;
+  border-radius: 2px;
+}
+.step-item.done:not(:last-child)::after { background: var(--navy); }
+.step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg2);
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 2px solid var(--gray-light);
+  transition: all 0.2s;
+}
+.step-item.active .step-num {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+.step-item.done .step-num {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+  font-size: 0;
+}
+.step-item.done .step-num::after { content: '✓'; font-size: 0.85rem; }
+.step-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gray);
+  white-space: nowrap;
+}
+.step-item.active .step-label { color: var(--navy); }
+.step-item.done .step-label { color: var(--navy); }
+
+/* STEP PANELS */
+.step-panel { display: none; }
+.step-panel.active { display: block; }
+
+/* SPLIT LAYOUT */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+  align-items: start;
+}
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+.card-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--navy);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 2px solid var(--bg2);
+}
+
+/* ROOM DETAIL */
+.room-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+.room-badge {
+  background: var(--navy);
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.room-name { font-size: 1.4rem; font-weight: 700; color: var(--navy); }
+.room-type { font-size: 0.85rem; color: var(--gray); margin-top: 2px; }
+.room-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem; }
+.meta-item { }
+.meta-label { font-size: 0.75rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.meta-val { font-size: 0.92rem; color: var(--ink); font-weight: 500; margin-top: 1px; }
+.amenities-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0.5rem;
+}
+.amenity-chip {
+  background: var(--bg2);
+  border: 1px solid var(--gray-light);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  color: var(--gray-text);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* SIDEBAR */
+.sidebar-section { margin-bottom: 1.4rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--bg2); }
+.sidebar-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.sidebar-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gray);
+  margin-bottom: 0.5rem;
+}
+.seg-btn {
+  display: flex;
+  border: 1.5px solid var(--gray-light);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--white);
+}
+.seg-btn button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 9px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gray);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.seg-btn button.sel {
+  background: var(--navy);
+  color: #fff;
+}
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+.price-label { font-size: 0.88rem; color: var(--gray-text); }
+.price-val { font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+.price-val.strike { text-decoration: line-through; color: var(--gray); font-weight: 400; font-size: 0.85rem; }
+.price-val.gold { color: var(--gold); font-size: 1.05rem; }
+.price-val.navy { color: var(--navy); }
+.price-total-row {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.8rem;
+}
+.price-total-label { font-size: 0.88rem; font-weight: 600; color: var(--gray-text); }
+.price-total-val { font-size: 1.15rem; font-weight: 700; color: var(--navy); }
+.voucher-row {
+  display: flex;
+  gap: 8px;
+}
+.voucher-row input {
+  flex: 1;
+  border: 1.5px solid var(--gray-light);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+}
+.voucher-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* STEP 2 */
+.upload-zone {
+  border: 2px dashed var(--gray-light);
+  border-radius: 8px;
+  padding: 1.2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  font-size: 0.82rem;
+  color: var(--gray);
+}
+.upload-zone:hover { border-color: var(--navy); color: var(--navy); }
+.upload-icon { font-size: 1.8rem; margin-bottom: 6px; display: block; }
+.privacy-note {
+  background: #f0f4f8;
+  border-left: 3px solid var(--navy);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 0.8rem;
+  color: var(--gray-text);
+  margin-top: 1.5rem;
+  line-height: 1.5;
+}
+
+/* STEP 3 */
+.tos-box {
+  border: 1.5px solid var(--gray-light);
+  border-radius: 8px;
+  height: 320px;
+  overflow-y: auto;
+  padding: 1.2rem 1.5rem;
+  font-size: 0.83rem;
+  color: var(--gray-text);
+  line-height: 1.75;
+  background: var(--bg);
+}
+.tos-box h4 { color: var(--navy); font-size: 0.9rem; margin: 1rem 0 0.4rem; }
+.tos-box p { margin-bottom: 0.6rem; }
+.tos-box::-webkit-scrollbar { width: 5px; }
+.tos-box::-webkit-scrollbar-thumb { background: var(--gray-light); border-radius: 5px; }
+.agree-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 1.2rem;
+  padding: 1rem 1.2rem;
+  background: #eef1f5;
+  border-radius: 8px;
+}
+.agree-row input[type=checkbox] { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--navy); flex-shrink: 0; }
+.agree-row label { font-size: 0.85rem; color: var(--gray-text); cursor: pointer; }
+
+/* STEP 4 */
+.pay-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.pay-tab-card {
+  border: 2px solid var(--gray-light);
+  border-radius: 10px;
+  padding: 1.2rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.pay-tab-card:hover { border-color: var(--navy); }
+.pay-tab-card.sel {
+  border-color: var(--navy);
+  background: #eef3fa;
+}
+.pay-tab-icon { font-size: 2rem; margin-bottom: 8px; }
+.pay-tab-label { font-size: 0.9rem; font-weight: 600; color: var(--navy); }
+.pay-tab-sub { font-size: 0.75rem; color: var(--gray); margin-top: 3px; }
+
+.fee-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.fee-table td { padding: 9px 0; font-size: 0.9rem; }
+.fee-table td:last-child { text-align: right; font-weight: 600; }
+.fee-table tr { border-bottom: 1px solid var(--bg2); }
+.fee-table tr:last-child { border-bottom: none; }
+.fee-add { color: #e67e22; }
+.fee-total-row td { padding-top: 12px; font-weight: 700; font-size: 1rem; color: var(--navy); }
+
+.refund-box {
+  background: #fffbf0;
+  border: 1.5px solid #f0d98a;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  font-size: 0.82rem;
+  color: #7d6109;
+  line-height: 1.6;
+  margin-bottom: 1.4rem;
+}
+.refund-box strong { display: block; margin-bottom: 4px; font-size: 0.85rem; color: #5a440a; }
+
+.booking-summary-card {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+}
+.bs-room { font-size: 1rem; font-weight: 700; color: var(--navy); }
+.bs-meta { font-size: 0.82rem; color: var(--gray-text); margin-top: 4px; display: flex; flex-direction: column; gap: 2px; }
+.bs-price { font-size: 0.95rem; font-weight: 600; color: var(--navy); margin-top: 6px; }
+
+.pay-cta {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.pay-cta:hover { background: var(--navy-mid); }
+.pay-cta.gold-cta { background: var(--gold); color: var(--navy-dark); }
+.pay-cta.gold-cta:hover { background: #b8943e; }
+
+.qfpay-brands {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  align-items: center;
+}
+.brand-chip {
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gray-text);
+}
+
+/* STEP NAV BUTTONS */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+/* FOOTER */
+footer {
+  background: var(--navy-dark);
+  color: rgba(255,255,255,0.75);
+  padding: 3.5rem 1.5rem 2rem;
+  margin-top: 0;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.footer-brand { }
+.footer-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.8rem;
+}
+.footer-logo span { color: var(--gold); }
+.footer-desc { font-size: 0.82rem; line-height: 1.7; margin-bottom: 1rem; }
+.footer-contact { font-size: 0.82rem; line-height: 1.9; }
+.footer-contact strong { color: #fff; }
+.footer-heading { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 0.9rem; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.footer-links a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-size: 0.83rem;
+  transition: color 0.15s;
+  cursor: pointer;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-bottom {
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 14px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--bg2);
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+.modal-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--gray);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.modal-body { padding: 1.5rem 2rem 2rem; font-size: 0.88rem; color: var(--gray-text); line-height: 1.8; }
+.modal-body h3 { color: var(--navy); font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+.modal-body h3:first-child { margin-top: 0; }
+.modal-body p { margin-bottom: 0.6rem; }
+.modal-body ul { padding-left: 1.2rem; margin-bottom: 0.8rem; }
+.modal-body ul li { margin-bottom: 0.4rem; }
+
+/* ROOMS PAGE */
+.rooms-filters {
+  background: var(--white);
+  box-shadow: var(--shadow);
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--bg2);
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.filter-label { font-size: 0.7rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
+.filter-sel {
+  border: 1.5px solid var(--gray-light);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 0.83rem;
+  font-family: inherit;
+  color: var(--ink);
+  background: #fff;
+  min-width: 140px;
+  cursor: pointer;
+  outline: none;
+}
+.filter-sel:focus { border-color: var(--navy); }
+.search-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 9px 22px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+}
+.sort-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 0.8rem 0 0.5rem;
+  font-size: 0.83rem;
+  color: var(--gray);
+}
+.sort-row select {
+  border: 1px solid var(--gray-light);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.82rem;
+  font-family: inherit;
+}
+.rooms-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 0 4rem;
+}
+.room-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+.room-card:hover { box-shadow: var(--shadow-lg); }
+.room-photo {
+  position: relative;
+  height: 200px;
+  background: linear-gradient(135deg, #2C3E50, #3d5066);
+  overflow: hidden;
+}
+.room-photo img { width: 100%; height: 100%; object-fit: cover; }
+.room-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 3rem;
+}
+.room-photo-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+}
+.nav-arrow {
+  background: rgba(255,255,255,0.85);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.room-card-body {
+  padding: 1.2rem 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.room-card-num { font-size: 1.4rem; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.room-card-specs { font-size: 0.78rem; color: var(--gray); margin-bottom: 0.8rem; }
+.room-card-amenities { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1rem; }
+.amenity-mini {
+  background: var(--bg2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  color: var(--gray-text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.room-card-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--bg2);
+}
+.room-price-old { font-size: 0.78rem; color: var(--gray); text-decoration: line-through; }
+.room-price { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
+.book-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.book-btn:hover { background: var(--navy-mid); }
+
+/* PAYMENT SUCCESS PAGE */
+.result-wrap {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+.result-card {
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  padding: 3rem 2.5rem;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+.result-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.2rem;
+  font-size: 2rem;
+}
+.result-icon.green { background: #eafaf1; color: var(--green); border: 2px solid #a9dfbf; }
+.result-icon.blue { background: #e8f0fd; color: var(--blue); border: 2px solid #a8c0f0; }
+.result-icon.red { background: #fdf0ef; color: var(--red); border: 2px solid #f0a8a8; }
+.result-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.result-badge.green { background: #eafaf1; color: var(--green); }
+.result-badge.blue { background: #e8f0fd; color: var(--blue); }
+.result-card h2 { font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 0.8rem; }
+.result-card p { font-size: 0.9rem; color: var(--gray-text); line-height: 1.7; margin-bottom: 1.5rem; }
+
+/* NAV PAGE LINKS */
+.page-nav-bar {
+  background: rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 2.5rem;
+}
+.page-nav-bar a {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.82rem;
+  text-decoration: none;
+  padding: 0.5rem 0.9rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.page-nav-bar a:hover { color: var(--gold); }
+.page-nav-bar a.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* UTILS */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.text-gray { color: var(--gray); }
+.text-sm { font-size: 0.83rem; }
+.bold { font-weight: 700; }
+.divider { height: 1px; background: var(--bg2); margin: 1.2rem 0; }
+
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .rooms-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.8rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .topnav-links { display: none; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .stepper { padding: 1rem; gap: 0; }
+  .step-label { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a class="topnav-logo" href="#" onclick="showPage('inquiry')">
+    <span>Runway 1331</span>&nbsp;× Demain
+  </a>
+  <div class="page-nav-bar" style="background:none;border:none;padding:0;">
+    <a onclick="showPage('inquiry')" id="nav-inquiry" class="active">預訂查詢</a>
+    <a onclick="showPage('rooms')" id="nav-rooms">房型列表</a>
+    <a onclick="showPage('checkout')" id="nav-checkout">預訂結帳</a>
+    <a onclick="showPage('success-qfpay')" id="nav-success">付款結果</a>
+  </div>
+  <div class="topnav-right">
+    <select class="lang-sel">
+      <option>繁體中文</option>
+      <option>简体中文</option>
+      <option>English</option>
+    </select>
+    <span style="color:rgba(255,255,255,0.5);font-size:0.8rem;">HKD</span>
+    <a class="nav-pill" onclick="showPage('rooms')">查看房型 →</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 1: INQUIRY
+════════════════════════════════════════════════ -->
+<div id="page-inquiry" class="page-tab active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Premium Co-Living · Hong Kong</p>
+    <h1>預訂查詢<br><span>告訴我們您的入住計劃</span></h1>
+    <p class="hero-sub">讓我們為您量身安排理想的居住體驗</p>
+    <div class="notice-banner">
+      <span class="notice-icon">📋</span>
+      <span>我們的團隊將於<strong>一個工作天</strong>內聯絡您，確認房型供應、價格與後續流程。確認後將透過電郵發送付款連結。</span>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="inquiry-section">
+    <div class="form-card">
+      <h2 class="form-title">填寫查詢表格</h2>
+      <p class="form-subtitle">標有 * 為必填項目，我們承諾保護您的個人資料。</p>
+
+      <form id="inquiryForm" onsubmit="submitInquiry(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">姓名 <span class="req">*</span></label>
+            <input class="form-control" type="text" placeholder="您的全名" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">電郵 <span class="req">*</span></label>
+            <input class="form-control" type="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">電話 <span class="req">*</span></label>
+            <input class="form-control" type="tel" placeholder="+852 XXXX XXXX" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">國籍 <span style="color:var(--gray)">(選填)</span></label>
+            <input class="form-control" type="text" placeholder="如：香港、中國大陸、台灣...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">意向房型 <span class="req">*</span></label>
+            <select class="form-control" required>
+              <option value="">請選擇房型</option>
+              <option>Studio 開放式 — HK$ 6,800/月</option>
+              <option>One-Bed Studio 開放式套房 — HK$ 8,500/月</option>
+              <option>Standard Room 標準房 — HK$ 7,200/月</option>
+              <option>Premium Suite 豪華套房 — HK$ 12,000/月</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">入住人數 <span class="req">*</span></label>
+            <select class="form-control" required>
+              <option>1 人</option>
+              <option>2 人</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">預計入住日期 <span class="req">*</span></label>
+            <input class="form-control" type="date" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">入住時長 <span class="req">*</span></label>
+            <select class="form-control" required>
+              <option>1 個月</option>
+              <option>3 個月</option>
+              <option>6 個月</option>
+              <option>12 個月</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">備註</label>
+            <textarea class="form-control" placeholder="如有任何特別要求或問題，請在此說明..."></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top:1.8rem;display:flex;justify-content:flex-end;">
+          <button type="submit" class="btn-primary gold-btn" style="font-size:1rem;padding:14px 36px;">
+            提交查詢 →
+          </button>
+        </div>
+      </form>
+
+      <div class="success-box" id="inquirySuccess">
+        <h3>✅ 查詢已提交！</h3>
+        <p>感謝您的查詢。我們的團隊將於一個工作天內以電郵聯絡您，確認房型及詳情，並發送付款連結。</p>
+      </div>
+    </div>
+  </section>
+  <div id="footer-inquiry"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 2: ROOMS LISTING
+════════════════════════════════════════════════ -->
+<div id="page-rooms" class="page-tab">
+  <div class="rooms-filters">
+    <div class="filter-group">
+      <span class="filter-label">地區</span>
+      <select class="filter-sel"><option>黃竹坑 Wong Chuk Hang</option><option>中環 Central</option></select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">項目</span>
+      <select class="filter-sel"><option>Runway 1331 × Demain</option></select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">房型</span>
+      <select class="filter-sel">
+        <option>所有房型</option>
+        <option>Studio 開放式</option>
+        <option>One-Bed Studio</option>
+        <option>Standard Room</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">入住對象</span>
+      <select class="filter-sel"><option>不限</option><option>男</option><option>女</option></select>
+    </div>
+    <button class="search-btn">🔍 搜索</button>
+  </div>
+
+  <div class="container">
+    <div class="sort-row">
+      <span>共找到 6 個房間</span>
+      <select>
+        <option>排序：價格由低至高</option>
+        <option>排序：樓層</option>
+      </select>
+    </div>
+    <div class="rooms-grid">
+      <!-- Cards 1-6 -->
+      <div class="room-card" onclick="showPage('checkout')">
+        <div class="room-photo">
+          <div class="room-photo-placeholder">🏠</div>
+          <div class="room-photo-nav">
+            <button class="nav-arrow">‹</button>
+            <button class="nav-arrow">›</button>
+          </div>
+          <div style="position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:4px;">黃竹坑 64號</div>
+        </div>
+        <div class="room-card-body">
+          <div class="room-card-num">1206</div>
+          <div class="room-card-specs">215 ft² / 12F / 東南朝向 / 0.9m(寬)×1.9m(長)</div>
+          <div class="room-card-amenities">
+            <span class="amenity-mini">📶 Wi-Fi</span>
+            <span class="amenity-mini">❄️ 冷氣</span>
+            <span class="amenity-mini">🛋️ 家具</span>
+            <span class="amenity-mini">🚿 獨立浴室</span>
+            <span class="amenity-mini">🧊 冰箱</span>
+            <span class="amenity-mini">❄️ 空調</span>
+          </div>
+          <div class="room-card-footer">
+            <div>
+              <div class="room-price-old">HKD 16,100/月</div>
+              <div class="room-price" style="color:var(--gold);">HKD 14,836.15/月</div>
+            </div>
+            <button class="book-btn">立即訂房</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card" onclick="showPage('checkout')">
+        <div class="room-photo">
+          <div class="room-photo-placeholder">🏠</div>
+          <div class="room-photo-nav">
+            <button class="nav-arrow">‹</button>
+            <button class="nav-arrow">›</button>
+          </div>
+          <div style="position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:4px;">黃竹坑 64號</div>
+        </div>
+        <div class="room-card-body">
+          <div class="room-card-num">1306</div>
+          <div class="room-card-specs">215 ft² / 13F / 東南朝向 / 0.9m(寬)×1.9m(長)</div>
+          <div class="room-card-amenities">
+            <span class="amenity-mini">📶 Wi-Fi</span>
+            <span class="amenity-mini">❄️ 冷氣</span>
+            <span class="amenity-mini">🛋️ 家具</span>
+            <span class="amenity-mini">🚿 獨立浴室</span>
+            <span class="amenity-mini">🧊 冰箱</span>
+            <span class="amenity-mini">❄️ 空調</span>
+          </div>
+          <div class="room-card-footer">
+            <div>
+              <div class="room-price-old">HKD 16,100/月</div>
+              <div class="room-price" style="color:var(--gold);">HKD 14,836.15/月</div>
+            </div>
+            <button class="book-btn">立即訂房</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card" onclick="showPage('checkout')">
+        <div class="room-photo">
+          <div class="room-photo-placeholder">🏠</div>
+          <div class="room-photo-nav">
+            <button class="nav-arrow">‹</button>
+            <button class="nav-arrow">›</button>
+          </div>
+          <div style="position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:4px;">黃竹坑 64號</div>
+        </div>
+        <div class="room-card-body">
+          <div class="room-card-num">1406</div>
+          <div class="room-card-specs">215 ft² / 14F / 近窗戶 / 0.9m(寬)×1.9m(長)</div>
+          <div class="room-card-amenities">
+            <span class="amenity-mini">📶 Wi-Fi</span>
+            <span class="amenity-mini">❄️ 冷氣</span>
+            <span class="amenity-mini">🛋️ 上鋪書桌</span>
+            <span class="amenity-mini">🚿 浴室</span>
+            <span class="amenity-mini">🧊 冰箱</span>
+            <span class="amenity-mini">❄️ 空調</span>
+          </div>
+          <div class="room-card-footer">
+            <div>
+              <div class="room-price-old">HKD 16,100/月</div>
+              <div class="room-price" style="color:var(--gold);">HKD 14,836.15/月</div>
+            </div>
+            <button class="book-btn">立即訂房</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card" onclick="showPage('checkout')">
+        <div class="room-photo">
+          <div class="room-photo-placeholder">🏠</div>
+          <div class="room-photo-nav">
+            <button class="nav-arrow">‹</button>
+            <button class="nav-arrow">›</button>
+          </div>
+          <div style="position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:4px;">黃竹坑 64號</div>
+        </div>
+        <div class="room-card-body">
+          <div class="room-card-num">1506</div>
+          <div class="room-card-specs">215 ft² / 15F / 東南朝向 / 0.9m(寬)×1.9m(長)</div>
+          <div class="room-card-amenities">
+            <span class="amenity-mini">📶 Wi-Fi</span>
+            <span class="amenity-mini">❄️ 冷氣</span>
+            <span class="amenity-mini">🛋️ 上體積架</span>
+            <span class="amenity-mini">🚿 浴室</span>
+            <span class="amenity-mini">🧊 冰箱</span>
+            <span class="amenity-mini">❄️ 空調</span>
+          </div>
+          <div class="room-card-footer">
+            <div>
+              <div class="room-price-old">HKD 16,100/月</div>
+              <div class="room-price" style="color:var(--gold);">HKD 14,836.15/月</div>
+            </div>
+            <button class="book-btn">立即訂房</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card" onclick="showPage('checkout')">
+        <div class="room-photo">
+          <div class="room-photo-placeholder">🏠</div>
+          <div class="room-photo-nav">
+            <button class="nav-arrow">‹</button>
+            <button class="nav-arrow">›</button>
+          </div>
+          <div style="position:absolute;top:10px;left:10px;background:var(--gold);color:var(--navy-dark);font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:4px;">豪華套房</div>
+        </div>
+        <div class="room-card-body">
+          <div class="room-card-num">1331A</div>
+          <div class="room-card-specs">380 ft² / 13F / 全海景 / 1.5m(寬)×2.0m(長)</div>
+          <div class="room-card-amenities">
+            <span class="amenity-mini">📶 Wi-Fi</span>
+            <span class="amenity-mini">❄️ 冷氣</span>
+            <span class="amenity-mini">🛋️ 沙發</span>
+            <span class="amenity-mini">🚿 獨立浴室</span>
+            <span class="amenity-mini">🧊 冰箱</span>
+            <span class="amenity-mini">🍳 迷你廚房</span>
+          </div>
+          <div class="room-card-footer">
+            <div>
+              <div class="room-price-old">HKD 14,000/月</div>
+              <div class="room-price" style="color:var(--gold);">HKD 12,000/月</div>
+            </div>
+            <button class="book-btn">立即訂房</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="room-card" onclick="showPage('checkout')">
+        <div class="room-photo">
+          <div class="room-photo-placeholder">🏠</div>
+          <div class="room-photo-nav">
+            <button class="nav-arrow">‹</button>
+            <button class="nav-arrow">›</button>
+          </div>
+          <div style="position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:4px;">黃竹坑 64號</div>
+        </div>
+        <div class="room-card-body">
+          <div class="room-card-num">906B</div>
+          <div class="room-card-specs">215 ft² / 9F / 近窗及門口 / 0.9m(寬)×1.9m(長)</div>
+          <div class="room-card-amenities">
+            <span class="amenity-mini">📶 Wi-Fi</span>
+            <span class="amenity-mini">❄️ 冷氣</span>
+            <span class="amenity-mini">🛋️ 家具</span>
+            <span class="amenity-mini">🚿 獨立浴室</span>
+            <span class="amenity-mini">🧊 冰箱</span>
+            <span class="amenity-mini">❄️ 空調</span>
+          </div>
+          <div class="room-card-footer">
+            <div>
+              <div class="room-price-old">HKD 10,000/月</div>
+              <div class="room-price" style="color:var(--gold);">HKD 9,200/月</div>
+            </div>
+            <button class="book-btn">立即訂房</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 3: CHECKOUT (4-STEP)
+════════════════════════════════════════════════ -->
+<div id="page-checkout" class="page-tab">
+  <div class="checkout-wrap">
+    <div class="container">
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <div class="step-item active" id="sitem-1" onclick="goStep(1)">
+          <div class="step-num" id="snum-1">1</div>
+          <span class="step-label">詳情</span>
+        </div>
+        <div class="step-item" id="sitem-2" onclick="goStep(2)">
+          <div class="step-num" id="snum-2">2</div>
+          <span class="step-label">用戶資訊</span>
+        </div>
+        <div class="step-item" id="sitem-3" onclick="goStep(3)">
+          <div class="step-num" id="snum-3">3</div>
+          <span class="step-label">許可協議</span>
+        </div>
+        <div class="step-item" id="sitem-4" onclick="goStep(4)">
+          <div class="step-num" id="snum-4">4</div>
+          <span class="step-label">支付押金</span>
+        </div>
+      </div>
+
+      <!-- ── STEP 1 ── -->
+      <div class="step-panel active" id="panel-1">
+        <div class="split">
+          <!-- LEFT: Room Detail -->
+          <div>
+            <div class="card">
+              <div class="card-title">1. 詳情 — 房間資訊</div>
+              <div class="room-header">
+                <div class="room-badge">1331</div>
+                <div>
+                  <div class="room-name">房間 1331A</div>
+                  <div class="room-type">Runway 1331 × Demain · 黃竹坑</div>
+                </div>
+              </div>
+              <div class="room-meta">
+                <div class="meta-item">
+                  <div class="meta-label">樓層</div>
+                  <div class="meta-val">13/F</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">面積</div>
+                  <div class="meta-val">215 sq.ft.</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">朝向</div>
+                  <div class="meta-val">東南全海景</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">床型</div>
+                  <div class="meta-val">0.9m × 1.9m 單人床</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">房型</div>
+                  <div class="meta-val">Studio 開放式</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">入住人數</div>
+                  <div class="meta-val">1 人</div>
+                </div>
+              </div>
+              <div class="card-title" style="margin-top:1rem;">設施</div>
+              <div class="amenities-row">
+                <span class="amenity-chip">📶 Wi-Fi 寬頻</span>
+                <span class="amenity-chip">❄️ 冷氣</span>
+                <span class="amenity-chip">🧊 冰箱</span>
+                <span class="amenity-chip">🗄️ 衣櫃</span>
+                <span class="amenity-chip">📚 書桌</span>
+                <span class="amenity-chip">🚿 獨立浴室</span>
+                <span class="amenity-chip">🔒 智能門鎖</span>
+                <span class="amenity-chip">🪑 椅子</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Pricing -->
+          <div class="card">
+            <div class="card-title">租金摘要</div>
+
+            <div class="sidebar-section">
+              <div class="sidebar-label">租賃期限</div>
+              <div class="seg-btn">
+                <button class="sel">1年</button>
+                <button>6個月</button>
+                <button>3個月</button>
+              </div>
+            </div>
+
+            <div class="sidebar-section">
+              <div class="sidebar-label">支付週期</div>
+              <div class="seg-btn">
+                <button class="sel">一次性預付 (9.7折)</button>
+                <button>半年付一次</button>
+              </div>
+            </div>
+
+            <div class="sidebar-section">
+              <div class="sidebar-label">使用優惠</div>
+              <div class="voucher-row">
+                <input type="text" placeholder="輸入優惠碼">
+                <button class="voucher-btn">套用</button>
+              </div>
+              <div class="text-sm text-gray mt-1">未選優惠</div>
+            </div>
+
+            <div class="sidebar-section">
+              <div class="sidebar-label">租金賬單</div>
+              <div class="price-row">
+                <span class="price-label">租金（一期/月一期）</span>
+                <div>
+                  <span class="price-val strike">HKD 110,400</span>
+                </div>
+              </div>
+              <div class="price-row">
+                <span class="price-label">9.7折優惠後</span>
+                <span class="price-val gold">HKD 101,733.60</span>
+              </div>
+              <div class="price-row">
+                <span class="price-label">平均月租金</span>
+                <span class="price-val">HKD 8,477.80</span>
+              </div>
+            </div>
+
+            <div class="sidebar-section">
+              <div class="sidebar-label">押金賬單</div>
+              <div class="price-row">
+                <span class="price-label">押金費用</span>
+                <span class="price-val navy">HKD 20,000</span>
+              </div>
+              <div class="price-row" style="font-size:0.78rem;">
+                <span class="price-label text-gray">需於 2026/07/16 前支付，可享受後重要 9.5 折優惠</span>
+              </div>
+            </div>
+
+            <div class="price-total-row">
+              <span class="price-total-label">首期應付總額</span>
+              <span class="price-total-val">HKD 121,733.60</span>
+            </div>
+
+            <div style="margin-top:1.2rem;">
+              <button class="btn-primary" style="width:100%;justify-content:center;" onclick="goStep(2)">
+                下一步 →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 2 ── -->
+      <div class="step-panel" id="panel-2">
+        <div class="split">
+          <div>
+            <div class="card">
+              <div class="card-title">2. 用戶資訊</div>
+              <div class="form-grid" style="gap:1rem;">
+                <div class="form-group">
+                  <label class="form-label">法定全名 <span class="req">*</span></label>
+                  <input class="form-control" type="text" placeholder="與身份證相同">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">HKID / 護照號碼 <span class="req">*</span></label>
+                  <input class="form-control" type="text" placeholder="A000000(0) / 護照號碼">
+                </div>
+                <div class="form-group full">
+                  <label class="form-label">HKID / 護照上載 <span class="req">*</span></label>
+                  <div class="upload-zone">
+                    <span class="upload-icon">📄</span>
+                    點擊上載身份證明文件（JPG / PNG / PDF，最大 5MB）
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">緊急聯絡人姓名 <span class="req">*</span></label>
+                  <input class="form-control" type="text" placeholder="緊急聯絡人">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">緊急聯絡人電話 <span class="req">*</span></label>
+                  <input class="form-control" type="tel" placeholder="+852 XXXX XXXX">
+                </div>
+                <div class="form-group full">
+                  <label class="form-label">在職 / 學生身份證明</label>
+                  <div class="upload-zone">
+                    <span class="upload-icon">🏢</span>
+                    上載僱傭證明或學生證（可選）
+                  </div>
+                </div>
+              </div>
+              <div class="privacy-note">
+                🔒 <strong>私隱聲明：</strong>個人資料將依據香港《個人資料（私隱）條例》（PDPO）嚴格保密，僅用於身份核實及入住安排，不會向第三方披露。
+              </div>
+              <div class="step-nav">
+                <button class="btn-secondary" onclick="goStep(1)">← 上一步</button>
+                <button class="btn-primary" onclick="goStep(3)">下一步 →</button>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="height:fit-content;">
+            <div class="card-title">預訂摘要</div>
+            <div class="booking-summary-card">
+              <div class="bs-room">Runway 1331 × Demain · 1331A</div>
+              <div class="bs-meta">
+                <span>📅 2026/08/20 — 2027/07/31</span>
+                <span>📐 215 sq.ft. / 13F</span>
+                <span>🛏️ Studio 開放式</span>
+              </div>
+              <div class="bs-price">HKD 8,477.80 /月（平均）</div>
+            </div>
+            <div class="price-row">
+              <span class="price-label">租金（年付）</span>
+              <span class="price-val gold">HKD 101,733.60</span>
+            </div>
+            <div class="price-row">
+              <span class="price-label">押金</span>
+              <span class="price-val navy">HKD 20,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 3 ── -->
+      <div class="step-panel" id="panel-3">
+        <div class="split">
+          <div>
+            <div class="card">
+              <div class="card-title">3. 許可協議 — 服務條款與住宿協議</div>
+              <div class="tos-box">
+                <h4>住宿許可協議 — Runway 1331 × Demain</h4>
+                <p>本協議由 <strong>Demain Culture Entertainment Limited（下稱「管理方」）</strong>與入住租客（下稱「租客」）訂立，就以下房間之住宿安排達成協議。</p>
+
+                <h4>1. 許可期限</h4>
+                <p>住宿許可期限由雙方確認之入住日期起計，按所選月份計算。許可期滿後，如雙方未有書面續約，租客須於到期日或之前遷出。</p>
+
+                <h4>2. 月租金及支付方式</h4>
+                <p>租客同意按協議金額支付月租金，並選擇一次性年付或半年付一次之付款方式。所有金額以港幣（HKD）計算。逾期付款將收取每日0.1%之滯納金。</p>
+
+                <h4>3. 押金安排</h4>
+                <p>租客須於入住前繳交相等於兩個月租金之押金（HKD 20,000）。押金將於退房後14個工作天內退還，扣除任何損壞賠償或未付費用。</p>
+
+                <h4>4. 房屋使用守則（House Rules）</h4>
+                <p>• 禁止攜帶訪客在未通知管理方情況下過夜。</p>
+                <p>• 禁止在房間內吸煙、使用電子煙。</p>
+                <p>• 禁止飼養寵物。</p>
+                <p>• 晚上11時至早上8時請保持安靜，避免影響其他住客。</p>
+                <p>• 公共設施（廚房、洗衣房、休息區）使用後請保持整潔。</p>
+                <p>• 禁止在房間內進行任何商業活動。</p>
+
+                <h4>5. 維修責任</h4>
+                <p>租客對因個人疏忽造成之損壞須負全額賠償責任。日常維護由管理方負責，租客須於發現問題後48小時內通知管理方。</p>
+
+                <h4>6. 提前終止</h4>
+                <p>租客如需提前終止協議，須提前30日書面通知管理方，並支付相等於一個月租金之違約金。管理方有權在特定情況下（包括嚴重違反守則）提前終止協議。</p>
+
+                <h4>7. 私隱政策</h4>
+                <p>所有個人資料之收集、使用及儲存均依據香港《個人資料（私隱）條例》（PDPO）處理。詳情請參閱私隱政策頁面。</p>
+
+                <h4>8. 適用法律</h4>
+                <p>本協議受香港法律管轄，任何爭議由香港法院專屬管轄。</p>
+              </div>
+
+              <div class="agree-row">
+                <input type="checkbox" id="agreeCheck">
+                <label for="agreeCheck">
+                  我已細閱並完全理解及同意 <strong>Runway 1331 × Demain</strong> 之服務條款、住宿許可協議及房屋使用守則的所有條款。
+                </label>
+              </div>
+
+              <div class="step-nav">
+                <button class="btn-secondary" onclick="goStep(2)">← 上一步</button>
+                <button class="btn-primary" onclick="goStep(4)">下一步 →</button>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="height:fit-content;">
+            <div class="card-title">預訂摘要</div>
+            <div class="booking-summary-card">
+              <div class="bs-room">Runway 1331 × Demain · 1331A</div>
+              <div class="bs-meta">
+                <span>📅 2026/08/20 — 2027/07/31</span>
+                <span>📐 215 sq.ft. / 13F</span>
+              </div>
+              <div class="bs-price">HKD 9,200 /月</div>
+            </div>
+            <div class="sidebar-label" style="margin-top:0.5rem;">租賃期限</div>
+            <div class="seg-btn" style="margin-bottom:0.8rem;">
+              <button class="sel">年</button>
+            </div>
+            <div class="sidebar-label">支付週期</div>
+            <div class="seg-btn">
+              <button class="sel">一次性預付 (9.7折)</button>
+              <button>半年付一次</button>
+            </div>
+            <div class="divider"></div>
+            <div class="price-row">
+              <span class="price-label">租金（年付）</span>
+              <span class="price-val gold">HKD 101,733.60</span>
+            </div>
+            <div class="price-row">
+              <span class="price-label">押金</span>
+              <span class="price-val navy">HKD 20,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 4 ── -->
+      <div class="step-panel" id="panel-4">
+        <div class="split">
+          <div>
+            <div class="card">
+              <div class="card-title">4. 支付押金</div>
+
+              <div class="pay-tabs">
+                <div class="pay-tab-card" id="tab-online" onclick="selectPayTab('online')">
+                  <div class="pay-tab-icon">💳</div>
+                  <div class="pay-tab-label">線上支付</div>
+                  <div class="pay-tab-sub">信用卡 / QFPay / Alipay / WeChat</div>
+                </div>
+                <div class="pay-tab-card sel" id="tab-offline" onclick="selectPayTab('offline')">
+                  <div class="pay-tab-icon">🏦</div>
+                  <div class="pay-tab-label">線下轉賬</div>
+                  <div class="pay-tab-sub">銀行轉賬 / FPS</div>
+                </div>
+              </div>
+
+              <!-- ONLINE PANEL -->
+              <div id="pay-online-panel" style="display:none;">
+                <table class="fee-table">
+                  <tr>
+                    <td>押金費用</td>
+                    <td>HKD 20,000</td>
+                  </tr>
+                  <tr>
+                    <td>線上支付手續費</td>
+                    <td class="fee-add">+ HKD 360</td>
+                  </tr>
+                  <tr class="fee-total-row">
+                    <td>應付總額（HKD）</td>
+                    <td>HKD 20,360</td>
+                  </tr>
+                </table>
+
+                <div class="qfpay-brands">
+                  <span style="font-size:0.75rem;color:var(--gray);margin-right:4px;">接受：</span>
+                  <span class="brand-chip">Visa</span>
+                  <span class="brand-chip">Mastercard</span>
+                  <span class="brand-chip">Alipay HK</span>
+                  <span class="brand-chip">WeChat Pay</span>
+                  <span class="brand-chip">UnionPay</span>
+                  <span class="brand-chip">FPS</span>
+                </div>
+
+                <div class="refund-box" style="margin-top:1.2rem;">
+                  <strong>🔔 退款與取消政策聲明（QFPay 合規必填）</strong>
+                  若訂單未獲批覆，押金將於 <strong>7 個工作天</strong>內全額退還至原支付方式。
+                  取消預訂之扣款規則：入住前 30 天以上取消，退還 80% 押金；14–29 天前取消，退還 50%；14 天內取消，不予退還。
+                  線上支付手續費（HKD 360）於所有情況下均不退還。
+                </div>
+
+                <button class="pay-cta gold-cta" onclick="showPage('success-qfpay')">
+                  🔒 立即支付 HKD 20,360
+                </button>
+              </div>
+
+              <!-- OFFLINE PANEL -->
+              <div id="pay-offline-panel">
+                <table class="fee-table">
+                  <tr>
+                    <td>押金費用</td>
+                    <td>HKD 20,000</td>
+                  </tr>
+                  <tr>
+                    <td>線上支付手續費</td>
+                    <td class="fee-add">+ HKD 360</td>
+                  </tr>
+                  <tr class="fee-total-row">
+                    <td>應付總額（HKD）</td>
+                    <td>HKD 20,360</td>
+                  </tr>
+                </table>
+
+                <div style="background:var(--bg2);border-radius:8px;padding:1rem 1.2rem;font-size:0.85rem;color:var(--gray-text);margin-bottom:1.2rem;">
+                  <div style="font-weight:700;color:var(--navy);margin-bottom:0.5rem;">線下轉賬指引</div>
+                  <div style="margin-top:0.3rem;font-size:0.85rem;color:var(--gray-text);">轉賬完成後，請以電郵 <strong>hello@demainculture.com</strong> 提交轉賬記錄截圖，並註明您的房間號碼及姓名，以便核實付款。</div>
+                </div>
+
+                <div class="refund-box">
+                  <strong>🔔 退款與取消政策聲明</strong>
+                  若訂單未獲批覆，押金將於 <strong>7 個工作天</strong>內全額退還。
+                  取消預訂：入住前 30 天以上取消，退還 80% 押金；14–29 天前取消，退還 50%；14 天內取消，不予退還。
+                </div>
+
+                <button class="pay-cta" onclick="showPage('success-fps')">
+                  📸 我已完成轉賬，提交截圖
+                </button>
+              </div>
+
+              <div class="step-nav" style="margin-top:1rem;">
+                <button class="btn-secondary" onclick="goStep(3)">← 上一步</button>
+                <span style="font-size:0.78rem;color:var(--gray);">所有金額以 HKD 港元計算</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDEBAR -->
+          <div class="card" style="height:fit-content;">
+            <div class="card-title">預訂摘要</div>
+            <div class="booking-summary-card">
+              <div class="bs-room">Runway 1331 × Demain · 906B</div>
+              <div class="bs-meta">
+                <span>📅 2026/08/20 — 2027/07/31</span>
+                <span>📐 215 sq.ft. / 9F</span>
+              </div>
+              <div class="bs-price">HKD 9,200 /月</div>
+            </div>
+            <div class="divider"></div>
+            <div class="sidebar-label">租賃期限</div>
+            <div class="seg-btn" style="margin-bottom:0.8rem;">
+              <button class="sel" style="font-size:0.78rem;">年</button>
+            </div>
+            <div class="sidebar-label">支付週期</div>
+            <div class="seg-btn" style="margin-bottom:1rem;">
+              <button class="sel" style="font-size:0.76rem;">一次性預付 (9.7折)</button>
+              <button style="font-size:0.76rem;">半年付一次</button>
+            </div>
+            <div class="sidebar-label">使用優惠</div>
+            <div class="text-sm text-gray mb-1">未選優惠</div>
+            <div class="divider"></div>
+            <div class="price-row">
+              <span class="price-label">租金（年付）</span>
+              <span class="price-val strike">HKD 110,400</span>
+            </div>
+            <div class="price-row">
+              <span class="price-label">9.7折後</span>
+              <span class="price-val gold">HKD 101,733.60</span>
+            </div>
+            <div class="price-row">
+              <span class="price-label">押金</span>
+              <span class="price-val navy">HKD 20,000</span>
+            </div>
+            <div class="price-total-row" style="margin-top:0.5rem;">
+              <span class="price-total-label">今日應付</span>
+              <span class="price-total-val">HKD 20,360</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 4: PAYMENT SUCCESS — QFPAY
+════════════════════════════════════════════════ -->
+<div id="page-success-qfpay" class="page-tab">
+  <div class="result-wrap">
+    <div class="result-card" style="border:1.5px solid #a9dfbf;">
+      <div class="result-icon green">✓</div>
+      <span class="result-badge green">PAID VIA QFPAY</span>
+      <h2>Accommodation payment received</h2>
+      <p>Your accommodation payment has been successfully processed via QFPay. Your room at Runway 1331 × Demain is secured. A confirmation email with your booking details will be sent to you shortly.</p>
+      <button class="btn-primary" style="margin:0 auto;" onclick="showPage('inquiry')">← Back to homepage</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 5: PAYMENT SUCCESS — FPS/BANK
+════════════════════════════════════════════════ -->
+<div id="page-success-fps" class="page-tab">
+  <div class="result-wrap">
+    <div class="result-card" style="border:1.5px solid #a8c0f0;">
+      <div class="result-icon blue">📷</div>
+      <h2>Payment screenshot received</h2>
+      <p>Thank you for your accommodation payment. We have received your transfer screenshot and will verify the payment within 1 business day. Once confirmed, we will email you with your booking confirmation for Runway 1331 × Demain.</p>
+      <button class="btn-primary" style="margin:0 auto;" onclick="showPage('inquiry')">← Back to homepage</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     GLOBAL FOOTER (QFPay Compliance)
+════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo"><span>Runway 1331</span> × Demain</div>
+      <div class="footer-desc">
+        A premium co-living experience in the heart of Hong Kong. Designed for modern urban dwellers who value quality, community, and lifestyle.
+      </div>
+      <div class="footer-contact">
+        <div><strong>Demain Culture Entertainment Limited</strong></div>
+        <div>Suites 1218-19, 12/F, Chevalier Commercial Centre,</div>
+        <div>8 Wang Hoi Road, Kowloon Bay, Hong Kong</div>
+        <div>📞 +852 2129 0190</div>
+        <div>✉️ hello@demainculture.com</div>
+        <div style="margin-top:0.4rem;font-size:0.78rem;color:rgba(255,255,255,0.4);">Demain Culture Entertainment Limited</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">服務</div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('rooms')">查看房型</a></li>
+        <li><a onclick="showPage('inquiry')">提交查詢</a></li>
+        <li><a onclick="showPage('checkout')">預訂結帳</a></li>
+        <li><a>設施介紹</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">法律資訊</div>
+      <ul class="footer-links">
+        <li><a onclick="openModal('modal-privacy')">私隱政策</a></li>
+        <li><a onclick="openModal('modal-refund')">退款與取消政策</a></li>
+        <li><a onclick="openModal('modal-tos')">服務條款</a></li>
+        <li><a onclick="openModal('modal-disclaimer')">免責聲明</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">支付方式</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;">
+        <span class="brand-chip" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.15);">Visa / Mastercard</span>
+        <span class="brand-chip" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.15);">Alipay HK</span>
+        <span class="brand-chip" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.15);">WeChat Pay</span>
+        <span class="brand-chip" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.15);">FPS 轉數快</span>
+        <span class="brand-chip" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.15);">銀行轉賬</span>
+      </div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">所有交易以 HKD 港元結算。<br>支付服務由 QFPay 提供。</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Demain Culture Entertainment Limited. 版權所有。</span>
+    <span>由 Demain Culture 管理 · 香港</span>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════ -->
+
+<!-- PRIVACY POLICY -->
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOnBg(event,'modal-privacy')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">私隱政策 Privacy Policy</span>
+      <button class="modal-close" onclick="closeModal('modal-privacy')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p><em>最後更新：2026年8月</em></p>
+      <h3>1. 資料收集目的</h3>
+      <p>Demain Culture Entertainment Limited（「本公司」）根據香港《個人資料（私隱）條例》（PDPO）收集及處理您的個人資料，用途包括：</p>
+      <ul>
+        <li>處理住宿申請及預訂</li>
+        <li>核實身份（HKID / 護照）</li>
+        <li>發送預訂確認及付款通知</li>
+        <li>遵從法律及監管要求</li>
+      </ul>
+      <h3>2. 收集的資料類型</h3>
+      <p>我們收集姓名、電郵、電話、HKID/護照號碼、緊急聯絡人資料及付款記錄。</p>
+      <h3>3. 資料保留期限</h3>
+      <p>個人資料保留至住宿結束後 7 年，或法律要求之期限。</p>
+      <h3>4. 查閱及更正</h3>
+      <p>您有權要求查閱或更正個人資料，請聯絡 hello@demainculture.com。</p>
+    </div>
+  </div>
+</div>
+
+<!-- REFUND POLICY -->
+<div class="modal-overlay" id="modal-refund" onclick="closeModalOnBg(event,'modal-refund')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">退款與取消政策 Refund & Cancellation Policy</span>
+      <button class="modal-close" onclick="closeModal('modal-refund')">✕</button>
+    </div>
+    <div class="modal-body">
+      <h3>1. 訂單未獲批覆</h3>
+      <p>若申請未獲管理方批覆，押金（HKD 20,000）將於 <strong>7 個工作天</strong>內全額退還至原支付方式。</p>
+      <h3>2. 取消預訂扣款規則</h3>
+      <ul>
+        <li><strong>入住前 30 天以上取消：</strong>退還 80% 押金</li>
+        <li><strong>入住前 14–29 天取消：</strong>退還 50% 押金</li>
+        <li><strong>入住前 14 天內取消：</strong>不予退還</li>
+      </ul>
+      <h3>3. 線上支付手續費</h3>
+      <p>線上支付手續費（HKD 360）於所有情況下均不退還，此費用由支付平台收取，本公司無法代為退回。</p>
+      <h3>4. 退款處理時間</h3>
+      <p>批准退款後，款項將於 7–14 個工作天內退回至原付款銀行或電子錢包賬戶。</p>
+      <h3>5. 聯絡方式</h3>
+      <p>如有退款查詢，請電郵至 hello@demainculture.com，標題為「退款申請 - 房號」。</p>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS -->
+<div class="modal-overlay" id="modal-tos" onclick="closeModalOnBg(event,'modal-tos')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">服務條款 Terms & Conditions</span>
+      <button class="modal-close" onclick="closeModal('modal-tos')">✕</button>
+    </div>
+    <div class="modal-body">
+      <h3>1. 服務性質</h3>
+      <p>本公司提供之服務為住宿許可（Licence），而非租約（Tenancy）。租客不具有香港《業主與租客（綜合）條例》下之租客保障。</p>
+      <h3>2. 使用限制</h3>
+      <p>房間只供登記住客使用，不得轉讓、分租或用於商業用途（包括但不限於 Airbnb 式短租）。</p>
+      <h3>3. 責任限制</h3>
+      <p>本公司對因不可抗力（天災、疫情、政府命令）引致之服務中斷不承擔責任。</p>
+      <h3>4. 適用法律</h3>
+      <p>本服務條款受香港法律管轄。任何爭議由香港法院專屬管轄解決。</p>
+    </div>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="modal-overlay" id="modal-disclaimer" onclick="closeModalOnBg(event,'modal-disclaimer')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">免責聲明 Disclaimer</span>
+      <button class="modal-close" onclick="closeModal('modal-disclaimer')">✕</button>
+    </div>
+    <div class="modal-body">
+      <h3>網站資訊準確性</h3>
+      <p>本網站所載資訊僅供參考，本公司保留隨時修改房租、政策及設施資訊之權利，恕不另行通知。</p>
+      <h3>外部連結</h3>
+      <p>本網站可能包含外部連結，本公司對外部網站之內容不承擔任何責任。</p>
+      <h3>支付安全</h3>
+      <p>所有線上支付均由 QFPay 加密處理，本公司不儲存任何信用卡資料。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── PAGE NAVIGATION ───
+const pages = ['inquiry','rooms','checkout','success-qfpay','success-fps'];
+function showPage(id) {
+  pages.forEach(p => {
+    const el = document.getElementById('page-'+p);
+    if(el) el.classList.remove('active');
+    const nav = document.getElementById('nav-'+p);
+    if(nav) nav.classList.remove('active');
+  });
+  const el = document.getElementById('page-'+id);
+  if(el) el.classList.add('active');
+  const nav = document.getElementById('nav-'+id);
+  if(nav) nav.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ─── STEPPER ───
+let currentStep = 1;
+function goStep(n) {
+  for(let i=1;i<=4;i++) {
+    document.getElementById('panel-'+i).classList.remove('active');
+    const item = document.getElementById('sitem-'+i);
+    item.classList.remove('active','done');
+    if(i < n) item.classList.add('done');
+    else if(i === n) item.classList.add('active');
+  }
+  document.getElementById('panel-'+n).classList.add('active');
+  currentStep = n;
+  window.scrollTo(0,0);
+}
+
+// ─── PAY TAB ───
+function selectPayTab(t) {
+  document.getElementById('tab-online').classList.remove('sel');
+  document.getElementById('tab-offline').classList.remove('sel');
+  document.getElementById('pay-online-panel').style.display='none';
+  document.getElementById('pay-offline-panel').style.display='none';
+  document.getElementById('tab-'+t).classList.add('sel');
+  document.getElementById('pay-'+t+'-panel').style.display='block';
+}
+// default: offline selected
+selectPayTab('offline');
+
+// ─── INQUIRY FORM ───
+function submitInquiry(e) {
+  e.preventDefault();
+  document.getElementById('inquirySuccess').classList.add('show');
+  e.target.style.display='none';
+  window.scrollTo(0,500);
+}
+
+// ─── MODALS ───
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+function closeModalOnBg(e, id) {
+  if(e.target === document.getElementById(id)) closeModal(id);
+}
+
+// ─── SEG BUTTONS ───
+document.querySelectorAll('.seg-btn').forEach(group => {
+  group.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('button').forEach(b => b.classList.remove('sel'));
+      btn.classList.add('sel');
+    });
+  });
+});
+</script>
+</body>
+</html>

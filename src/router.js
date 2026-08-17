@@ -45,7 +45,7 @@ const routes = [
   { path: '/app-waitlist', name: 'app-waitlist', component: AppWaitlistPage },
 
   // ============ Legal ============
-  { path: '/legal/:page(terms|shop-terms|refund|shipping|privacy|stay-terms|stay-refund|stay-payment)', name: 'legal', component: LegalPage },
+  { path: '/legal/:page(terms|shop-terms|refund|shipping|privacy|stay-terms|stay-refund|stay-payment|disclaimer)', name: 'legal', component: LegalPage },
 
   // ============ Admin ============
   // Choice page with 2 buttons (Stay / Shop)
